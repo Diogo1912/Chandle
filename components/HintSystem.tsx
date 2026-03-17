@@ -6,20 +6,27 @@ interface HintSystemProps {
   puzzle: Puzzle;
   hintsUnlocked: number;    // 0–4
   guessCount: number;
-  onUnlockHint: () => void;
   solved: boolean;
   revealed: boolean;
 }
 
 const MAX_HINTS = 4;
-const NUDGE_THRESHOLD = 6; // Show nudge after this many wrong guesses
 
-// Hints are revealed in this order
+// Derive initials from the answer: first letter of EVERY word, uppercased
+function getInitials(answer: string): string {
+  return answer
+    .split(/\s+/)
+    .filter(w => w.length > 0)
+    .map(w => w[0].toUpperCase())
+    .join(' ');
+}
+
+// Hints revealed in this order: era → genre → initials → artist
 function getHints(puzzle: Puzzle): { label: string; value: string }[] {
   return [
     { label: 'Era',      value: puzzle.era },
-    { label: 'Initials', value: puzzle.firstLetters },
     { label: 'Genre',    value: puzzle.genre },
+    { label: 'Initials', value: getInitials(puzzle.answer) },
     { label: 'Artist',   value: puzzle.artist },
   ];
 }
@@ -28,80 +35,49 @@ export default function HintSystem({
   puzzle,
   hintsUnlocked,
   guessCount,
-  onUnlockHint,
   solved,
   revealed,
 }: HintSystemProps) {
   const hints = getHints(puzzle);
-  const canUnlock = hintsUnlocked < MAX_HINTS && !solved && !revealed;
-  const showNudge = guessCount >= NUDGE_THRESHOLD && hintsUnlocked === 0 && !solved;
 
   return (
     <div className="space-y-4">
-      {/* Hints header row */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
-          Hints {hintsUnlocked > 0 ? `(${hintsUnlocked}/${MAX_HINTS} used)` : ''}
-        </span>
-        {canUnlock && (
-          <button
-            onClick={onUnlockHint}
-            className="
-              text-xs px-3 py-1.5
-              border border-[var(--gold)] text-[var(--gold)]
-              hover:bg-[var(--gold)] hover:text-[var(--bg)]
-              transition-colors duration-150
-              font-medium tracking-wide
-              cursor-pointer
-            "
-          >
-            + Unlock next hint
-          </button>
-        )}
-      </div>
+      {/* Hints header */}
+      <span className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+        Hints {hintsUnlocked > 0 ? `(${hintsUnlocked}/${MAX_HINTS} revealed)` : ''}
+      </span>
 
-      {/* Nudge if player is stuck */}
-      {showNudge && (
-        <p className="text-xs text-[var(--muted)] animate-fade-in">
-          Stuck? A hint might help.
-        </p>
-      )}
-
-      {/* Hint list */}
-      {hintsUnlocked > 0 && (
-        <ul className="space-y-2">
-          {hints.map((hint, i) => {
-            const isUnlocked = i < hintsUnlocked;
-            return (
-              <li
-                key={hint.label}
-                className={`
-                  flex items-start gap-3 text-sm
-                  ${isUnlocked ? 'animate-fade-in' : 'opacity-40'}
-                `}
-                style={isUnlocked ? { animationDelay: `${i * 60}ms` } : {}}
-              >
-                <span className="text-[var(--gold)] mt-0.5 select-none">•</span>
-                <span>
-                  <span className="text-[var(--muted)] text-xs uppercase tracking-wider mr-2">
-                    {hint.label}:
-                  </span>
-                  {isUnlocked ? (
-                    <span className="font-medium text-[var(--ink)]">{hint.value}</span>
-                  ) : (
-                    <span className="text-[var(--muted)] italic text-xs">— locked —</span>
-                  )}
+      {/* Hint list — always show all 4 slots so locked ones are visible */}
+      <ul className="space-y-2">
+        {hints.map((hint, i) => {
+          const isUnlocked = i < hintsUnlocked;
+          return (
+            <li
+              key={hint.label}
+              className="flex items-start gap-3 text-sm"
+            >
+              <span className={`mt-0.5 select-none ${isUnlocked ? 'text-[var(--gold)]' : 'text-[var(--border)]'}`}>•</span>
+              <span>
+                <span className="text-[var(--muted)] text-xs uppercase tracking-wider mr-2">
+                  {hint.label}:
                 </span>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+                {isUnlocked ? (
+                  <span className="font-medium text-[var(--ink)] animate-fade-in">{hint.value}</span>
+                ) : (
+                  <span className="text-[var(--muted)] italic text-xs">— locked —</span>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
 
-      {/* All hints locked placeholder */}
-      {hintsUnlocked === 0 && !showNudge && (
+      {/* Contextual note */}
+      {hintsUnlocked === 0 && !solved && !revealed && (
         <p className="text-xs text-[var(--muted)]">
-          No hints used yet.
+          {guessCount === 0
+            ? 'Hints unlock as you guess.'
+            : 'Keep guessing — hints are on the way.'}
         </p>
       )}
     </div>

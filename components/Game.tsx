@@ -69,7 +69,11 @@ export default function Game() {
 
     const correct = isCorrect(guess, puzzle);
     const newGuesses = [...state.guesses, guess];
-    const nextState: GameState = { ...state, guesses: newGuesses, solved: correct };
+    // Auto-unlock one hint per wrong guess (up to 4), so all hints are visible by guess 5+
+    const newHintsUnlocked = correct
+      ? state.hintsUnlocked
+      : Math.min(newGuesses.length, 4);
+    const nextState: GameState = { ...state, guesses: newGuesses, solved: correct, hintsUnlocked: newHintsUnlocked };
     setState(nextState);
 
     if (correct) {
@@ -80,12 +84,6 @@ export default function Game() {
     setWrongGuessFlash(true);
     setTimeout(() => setWrongGuessFlash(false), 600);
   }, [state, puzzle]);
-
-  const handleUnlockHint = useCallback(() => {
-    if (!state) return;
-    if (state.hintsUnlocked >= 4 || state.solved || state.revealed) return;
-    setState({ ...state, hintsUnlocked: state.hintsUnlocked + 1 });
-  }, [state]);
 
   const handleGiveUp = useCallback(() => {
     if (!state || state.solved) return;
@@ -209,7 +207,6 @@ export default function Game() {
             puzzle={puzzle}
             hintsUnlocked={state.hintsUnlocked}
             guessCount={state.guesses.length}
-            onUnlockHint={handleUnlockHint}
             solved={state.solved}
             revealed={state.revealed}
           />
