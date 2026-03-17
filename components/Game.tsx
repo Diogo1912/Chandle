@@ -224,12 +224,14 @@ export default function Game() {
           </div>
         )}
 
-        {/* ── Bonus puzzle section ── */}
-        <BonusSection
-          puzzle={bonusPuzzle}
-          state={bonusState}
-          onStateChange={(next) => setBonusState(next)}
-        />
+        {/* ── Bonus puzzle — only after game ends ── */}
+        {isFinished && (
+          <BonusSection
+            puzzle={bonusPuzzle}
+            state={bonusState}
+            onStateChange={(next) => setBonusState(next)}
+          />
+        )}
       </main>
 
       {/* ── Modals ─────────────────────────────────────────── */}

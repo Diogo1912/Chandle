@@ -16,22 +16,21 @@ const MAX_BONUS_GUESSES = 6;
 export default function BonusSection({ puzzle, state, onStateChange }: BonusSectionProps) {
   const [guess, setGuess] = useState('');
   const [flash, setFlash] = useState(false);
-  const [shareFlash, setShareFlash] = useState<number | null>(null);
+  const [sharing, setSharing] = useState(false);
 
-  // ── Share mechanic ──────────────────────────────────────────────
-  async function handleShare(slot: number) {
-    if (slot !== state.shareCount) return; // must share in order
+  // ── Share to unlock ───────────────────────────────────────────────
+  async function handleShare() {
+    setSharing(true);
+    const shareMsg = 'Can you guess the song from its bureaucratic description? Play Chandle!';
+    const shareUrl = 'https://chandle.vercel.app';
 
-    const shareMsg = 'Can you identify this song from its bureaucratic description? Play today\'s Chandle!';
-    const shareUrl = 'https://chandle.app';
     let done = false;
-
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({ title: 'Chandle — Guess the Song', text: shareMsg, url: shareUrl });
         done = true;
       } catch {
-        // user cancelled — fall through to clipboard
+        // user cancelled — fall back to clipboard
       }
     }
 
@@ -40,19 +39,17 @@ export default function BonusSection({ puzzle, state, onStateChange }: BonusSect
         await navigator.clipboard.writeText(`${shareMsg} ${shareUrl}`);
         done = true;
       } catch {
-        done = true; // count it anyway — clipboard blocked on some browsers
+        done = true; // blocked on some browsers — count it anyway
       }
     }
 
+    setSharing(false);
     if (done) {
-      setShareFlash(slot);
-      setTimeout(() => setShareFlash(null), 800);
-      const newCount = state.shareCount + 1;
-      onStateChange({ ...state, shareCount: newCount, unlocked: newCount >= 3 });
+      onStateChange({ ...state, shareCount: 1, unlocked: true });
     }
   }
 
-  // ── Bonus guess mechanic ────────────────────────────────────────
+  // ── Bonus guess ───────────────────────────────────────────────────
   function handleGuess() {
     const trimmed = guess.trim();
     if (!trimmed || state.solved || state.revealed || state.guesses.length >= MAX_BONUS_GUESSES) return;
@@ -74,14 +71,12 @@ export default function BonusSection({ puzzle, state, onStateChange }: BonusSect
   );
 
   return (
-    <section className="border-t-2 border-[var(--ink)] pt-10 mt-4 space-y-6">
+    <section className="border-t-2 border-[var(--ink)] pt-10 mt-4 space-y-6 animate-fade-in">
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 flex-wrap">
         <span className="text-[var(--red)] text-base leading-none">★</span>
-        <span className="text-xs font-medium uppercase tracking-widest">
-          Bonus Puzzle
-        </span>
+        <span className="text-xs font-medium uppercase tracking-widest">Bonus Puzzle</span>
         <span className="text-xs px-2 py-0.5 border border-[var(--red)] text-[var(--red)] uppercase tracking-wider font-medium">
           Extra Hard
         </span>
@@ -90,50 +85,28 @@ export default function BonusSection({ puzzle, state, onStateChange }: BonusSect
         )}
       </div>
 
-      {/* ── Locked state ── */}
+      {/* ── Locked: share to unlock ── */}
       {!state.unlocked && (
         <div className="space-y-5">
           <p className="text-sm text-[var(--muted)] leading-relaxed">
-            Share Chandle with three people to unlock this week&apos;s bonus puzzle.
+            Share today&apos;s Chandle to your Instagram Story to unlock this week&apos;s bonus puzzle.
             <br />
             <span className="text-xs">No hints. No mercy.</span>
           </p>
 
-          {/* Three share slots */}
-          <div className="flex gap-2">
-            {[0, 1, 2].map((slot) => {
-              const done = slot < state.shareCount;
-              const isNext = slot === state.shareCount;
-              const isFlashing = shareFlash === slot;
-              return (
-                <button
-                  key={slot}
-                  onClick={() => handleShare(slot)}
-                  disabled={done || !isNext}
-                  className={`
-                    flex-1 py-3 text-xs font-medium uppercase tracking-wide border-2
-                    transition-all duration-150
-                    ${isFlashing ? 'scale-95' : ''}
-                    ${done
-                      ? 'border-[var(--green)] text-[var(--green)] cursor-default'
-                      : isNext
-                        ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--bg)] hover:bg-transparent hover:text-[var(--ink)] cursor-pointer'
-                        : 'border-[var(--border)] text-[var(--border)] cursor-not-allowed'
-                    }
-                  `}
-                >
-                  {done ? '✓' : `Share ${slot + 1}`}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Progress label */}
-          <p className="text-xs text-[var(--muted)]">
-            {state.shareCount === 0
-              ? 'Share with 3 friends to unlock'
-              : `${state.shareCount}/3 shared — ${3 - state.shareCount} more to go`}
-          </p>
+          <button
+            onClick={handleShare}
+            disabled={sharing}
+            className="
+              w-full py-4 text-sm font-medium uppercase tracking-widest
+              border-2 border-[var(--ink)] bg-[var(--ink)] text-[var(--bg)]
+              hover:bg-transparent hover:text-[var(--ink)]
+              disabled:opacity-50
+              transition-colors duration-150 cursor-pointer
+            "
+          >
+            {sharing ? 'Opening share…' : '📸  Share to Instagram Story'}
+          </button>
         </div>
       )}
 

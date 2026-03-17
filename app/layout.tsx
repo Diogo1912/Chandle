@@ -16,21 +16,24 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://chandle.vercel.app"),
   title: "Chandle — Guess the Song",
   description:
     "A daily game. A famous song title, translated into bureaucratic nonsense. Can you guess the original?",
   openGraph: {
-    title: "Chandle",
+    title: "Chandle — Guess the Song",
     description:
       "Guess the song from its formal translation. New puzzle every day.",
-    url: "https://chandle.app",
+    url: "https://chandle.vercel.app",
     siteName: "Chandle",
     type: "website",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Chandle — Guess the Song",
     description: "Daily song title game. Formal language. Real songs.",
+    images: ["/opengraph-image"],
   },
 };
 
