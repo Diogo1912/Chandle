@@ -24,7 +24,7 @@ export function getDailyPuzzle(puzzles: Puzzle[]): {
   difficulty: 'easy' | 'medium' | 'hard';
   dayName: string;
 } {
-  const epoch = new Date('2026-03-17').getTime();
+  const epoch = new Date(2026, 2, 17).getTime(); // local midnight Mar 17
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const dayIndex = Math.floor((today - epoch) / 86_400_000);
@@ -54,7 +54,7 @@ export function getTodayString(): string {
  * Changes every Monday, so the bonus puzzle resets weekly.
  */
 export function getWeekString(): string {
-  const epoch = new Date('2026-03-17').getTime();
+  const epoch = new Date(2026, 2, 17).getTime();
   const now = new Date();
   const weekIndex = Math.floor((now.getTime() - epoch) / (7 * 86_400_000));
   return `week-${weekIndex}`;
@@ -62,7 +62,7 @@ export function getWeekString(): string {
 
 /** Picks this week's bonus puzzle deterministically from the bonus pool. */
 export function getWeekBonusPuzzle(bonusPuzzles: Puzzle[]): Puzzle {
-  const epoch = new Date('2026-03-17').getTime();
+  const epoch = new Date(2026, 2, 17).getTime();
   const now = new Date();
   const weekIndex = Math.floor((now.getTime() - epoch) / (7 * 86_400_000));
   return bonusPuzzles[weekIndex % bonusPuzzles.length];
