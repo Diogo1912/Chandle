@@ -1,17 +1,43 @@
 import { type Puzzle } from './puzzles';
 
 /**
- * Returns today's puzzle using a deterministic day-index from a fixed epoch.
- * Everyone on the same calendar date (local) gets the same puzzle.
+ * Maps day-of-week to puzzle difficulty.
+ * Mon/Tue = easy, Wed/Thu = medium, Fri/Sat/Sun = hard.
+ * This creates a weekly escalation — easier to start the week, harder by Friday.
  */
-export function getDailyPuzzle(puzzles: Puzzle[]): { puzzle: Puzzle; dayIndex: number } {
+export function getDayDifficulty(date: Date): 'easy' | 'medium' | 'hard' {
+  const day = date.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+  if (day === 1 || day === 2) return 'easy';
+  if (day === 3 || day === 4) return 'medium';
+  return 'hard'; // Fri, Sat, Sun
+}
+
+export const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/**
+ * Returns today's puzzle. Filters by day-of-week difficulty so difficulty
+ * escalates across the week. Falls back to full pool if a tier is empty.
+ */
+export function getDailyPuzzle(puzzles: Puzzle[]): {
+  puzzle: Puzzle;
+  dayIndex: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  dayName: string;
+} {
   const epoch = new Date('2025-01-01').getTime();
   const now = new Date();
-  // Strip to midnight local time so the index is stable all day
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const dayIndex = Math.floor((today - epoch) / 86_400_000);
-  const puzzle = puzzles[((dayIndex % puzzles.length) + puzzles.length) % puzzles.length];
-  return { puzzle, dayIndex };
+
+  const difficulty = getDayDifficulty(now);
+  const dayName = DAY_NAMES[now.getDay()];
+
+  // Filter pool by today's difficulty, fall back to full pool if somehow empty
+  const pool = puzzles.filter(p => p.difficulty === difficulty);
+  const effectivePool = pool.length > 0 ? pool : puzzles;
+  const puzzle = effectivePool[((dayIndex % effectivePool.length) + effectivePool.length) % effectivePool.length];
+
+  return { puzzle, dayIndex, difficulty, dayName };
 }
 
 /** Returns today's date as a YYYY-MM-DD string (local time). */
@@ -21,6 +47,25 @@ export function getTodayString(): string {
   const m = String(now.getMonth() + 1).padStart(2, '0');
   const d = String(now.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
+}
+
+/**
+ * Returns a week key like "week-62" — number of weeks since epoch.
+ * Changes every Monday, so the bonus puzzle resets weekly.
+ */
+export function getWeekString(): string {
+  const epoch = new Date('2025-01-01').getTime();
+  const now = new Date();
+  const weekIndex = Math.floor((now.getTime() - epoch) / (7 * 86_400_000));
+  return `week-${weekIndex}`;
+}
+
+/** Picks this week's bonus puzzle deterministically from the bonus pool. */
+export function getWeekBonusPuzzle(bonusPuzzles: Puzzle[]): Puzzle {
+  const epoch = new Date('2025-01-01').getTime();
+  const now = new Date();
+  const weekIndex = Math.floor((now.getTime() - epoch) / (7 * 86_400_000));
+  return bonusPuzzles[weekIndex % bonusPuzzles.length];
 }
 
 /**
@@ -46,7 +91,6 @@ export function normalise(s: string): string {
 export function levenshtein(a: string, b: string): number {
   const m = a.length;
   const n = b.length;
-  // dp[i][j] = edit distance between a[0..i-1] and b[0..j-1]
   const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
     Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
   );
@@ -57,9 +101,9 @@ export function levenshtein(a: string, b: string): number {
         dp[i][j] = dp[i - 1][j - 1];
       } else {
         dp[i][j] = 1 + Math.min(
-          dp[i - 1][j],     // deletion
-          dp[i][j - 1],     // insertion
-          dp[i - 1][j - 1], // substitution
+          dp[i - 1][j],
+          dp[i][j - 1],
+          dp[i - 1][j - 1],
         );
       }
     }
@@ -78,7 +122,6 @@ export function isCorrect(guess: string, puzzle: Puzzle): boolean {
   return puzzle.accepted.some((accepted) => {
     const normA = normalise(accepted);
     if (normGuess === normA) return true;
-    // Allow up to 2 edits for short strings, 3 for longer ones
     const maxDist = normA.length > 10 ? 3 : 2;
     return levenshtein(normGuess, normA) <= maxDist;
   });
@@ -86,7 +129,6 @@ export function isCorrect(guess: string, puzzle: Puzzle): boolean {
 
 /**
  * Build the share card text for clipboard.
- * Each row of emojis represents one guess attempt:
  *   🟩 = correct  🟥 = wrong  💡 = hint used  ⬜ = unused slot
  */
 export function buildShareText(params: {
@@ -99,30 +141,24 @@ export function buildShareText(params: {
   const { guesses, hintsUnlocked, solved, dayIndex, formalTitle } = params;
   const MAX_GUESSES = 6;
 
-  // Build emoji row — one slot per attempt
   const rows: string[] = [];
   for (let i = 0; i < MAX_GUESSES; i++) {
     if (i < guesses.length) {
-      if (i === guesses.length - 1 && solved) {
-        rows.push('🟩'); // correct guess
-      } else {
-        // Interleave hints: hint is "used" on the attempt after it was unlocked
-        // Simplistic: mark 💡 for hint-adjacent guesses
-        rows.push('🟥');
-      }
+      rows.push(i === guesses.length - 1 && solved ? '🟩' : '🟥');
     } else {
       rows.push('⬜');
     }
   }
 
-  // Append hint indicators after the grid
-  const hintRow = hintsUnlocked > 0 ? `💡 ${hintsUnlocked} hint${hintsUnlocked > 1 ? 's' : ''} used` : 'No hints used';
+  const hintRow = hintsUnlocked > 0
+    ? `💡 ${hintsUnlocked} hint${hintsUnlocked > 1 ? 's' : ''} used`
+    : 'No hints used';
 
   const truncated = formalTitle.length > 60
     ? `"${formalTitle.slice(0, 57)}..."`
     : `"${formalTitle}"`;
 
-  const lines = [
+  return [
     `Chandle #${dayIndex + 1}`,
     truncated,
     '',
@@ -130,7 +166,5 @@ export function buildShareText(params: {
     hintRow,
     '',
     'chandle.app',
-  ];
-
-  return lines.join('\n');
+  ].join('\n');
 }
