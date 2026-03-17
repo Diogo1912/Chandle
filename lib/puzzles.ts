@@ -11,7 +11,7 @@ export interface Puzzle {
 }
 
 // ─── Bonus puzzles — extra-hard, one per week ────────────────────────────────
-// Revealed only after sharing with 3 friends. Deliberately cryptic.
+// IDs 101–115 reserved for bonus puzzles
 export const bonusPuzzles: Puzzle[] = [
   {
     id: 101,
@@ -184,7 +184,7 @@ export const bonusPuzzles: Puzzle[] = [
 export const puzzles: Puzzle[] = [
   {
     id: 1,
-    formal: "Meteorological Precipitation Directed At My Cranial Region",
+    formal: "Meteorological Event In Which Adult Male Individuals Descend From Elevated Atmospheric Regions",
     answer: "It's Raining Men",
     accepted: ["its raining men", "it's raining men", "raining men"],
     artist: "The Weather Girls",
@@ -195,7 +195,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 2,
-    formal: "Comprehensive Cessation Of All Romantic Sentiment Toward The Preceding Individual",
+    formal: "Declaration Of Complete Emotional Liberation Achieved Following The Recipient's Extended Absence",
     answer: "Since U Been Gone",
     accepted: ["since u been gone", "since you been gone", "since you've been gone"],
     artist: "Kelly Clarkson",
@@ -206,7 +206,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 3,
-    formal: "Persistent Domicile-Oriented Ideation During Absence From Said Domicile",
+    formal: "Earnest Petition For Return Transportation Via Rural Unpaved Thoroughfare To One's Ancestral Mountain Homeland",
     answer: "Take Me Home, Country Roads",
     accepted: ["take me home country roads", "country roads", "take me home"],
     artist: "John Denver",
@@ -217,14 +217,14 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 4,
-    formal: "Nocturnal Atmospheric Disturbance Preceding A Significant Celestial Occasion",
+    formal: "Official Advance Report Confirming That A Bearded Gift-Distributing Individual Is Currently En Route To Your Residential Address",
     answer: "Santa Claus Is Comin' To Town",
     accepted: ["santa claus is coming to town", "santa claus is comin to town"],
     artist: "Various",
     era: "1930s",
     genre: "Christmas / Pop",
     firstLetters: "S C I C T T",
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 5,
@@ -239,7 +239,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 6,
-    formal: "Imperative Request To Cease Vocalisations And Perform Oscillatory Movements",
+    formal: "Emphatic Prohibition Against Any Interference With The Speaker's Current State Of Uninhibited Recreational Enjoyment",
     answer: "Don't Stop Me Now",
     accepted: ["dont stop me now", "don't stop me now"],
     artist: "Queen",
@@ -250,29 +250,29 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 7,
-    formal: "Perpetual Rotational Motion Of The Terrestrial Globe",
+    formal: "Sincere Personal Attestation Of The Exceptional Beauty And Quality Of The Observed Natural World",
     answer: "What a Wonderful World",
     accepted: ["what a wonderful world"],
     artist: "Louis Armstrong",
     era: "1960s",
     genre: "Jazz / Pop",
     firstLetters: "W W W",
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 8,
-    formal: "Directive To Express Appreciation Via Percussive Appendage Actions",
-    answer: "Clap Along",
-    accepted: ["clap along", "happy clap along", "clap along if you feel like happiness is the truth"],
+    formal: "Directive To Perform Manual Percussion If The Listener Concurs That Joy Constitutes An Objective And Verifiable State Of Being",
+    answer: "Happy",
+    accepted: ["happy"],
     artist: "Pharrell Williams",
     era: "2010s",
     genre: "Pop / Soul",
     firstLetters: "H",
-    difficulty: "hard",
+    difficulty: "easy",
   },
   {
     id: 9,
-    formal: "Telecommunication Request From An Undisclosed Nocturnal Location",
+    formal: "Hesitant Solicitation For The Recipient To Make Telephone Contact With The Speaker, Subject To Their Willingness To Do So",
     answer: "Call Me Maybe",
     accepted: ["call me maybe"],
     artist: "Carly Rae Jepsen",
@@ -283,7 +283,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 10,
-    formal: "Vigorous Lateral Displacement Of The Posterior Anatomical Region",
+    formal: "Directive To Dismiss Negative External Criticism Through Vigorous Lateral Displacement Of The Subject In Question",
     answer: "Shake It Off",
     accepted: ["shake it off"],
     artist: "Taylor Swift",
@@ -294,18 +294,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 11,
-    formal: "Formal Declaration Of Intent To Pursue Relentless Nocturnal Entertainment",
+    formal: "Emphatic First-Person Declaration Of Continued Emotional And Biological Endurance Following The Unwanted Dissolution Of A Romantic Partnership",
     answer: "I Will Survive",
     accepted: ["i will survive"],
     artist: "Gloria Gaynor",
     era: "1970s",
     genre: "Disco",
     firstLetters: "I W S",
-    difficulty: "medium",
+    difficulty: "easy",
   },
   {
     id: 12,
-    formal: "Requiem For The Passage Of Temporal Existence In A Recreational District",
+    formal: "Account Of Two Under-Resourced Individuals Sustaining Their Relationship Entirely On Hope And Supplication To A Higher Deity",
     answer: "Living on a Prayer",
     accepted: ["living on a prayer", "livin on a prayer", "livin' on a prayer"],
     artist: "Bon Jovi",
@@ -327,7 +327,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 14,
-    formal: "Prolonged Absence Of Solar Illumination Preceding A Celestial Body",
+    formal: "Joyful Announcement Of The Imminent Arrival Of The Nearest Star Following A Long Period Of Cold And Darkness",
     answer: "Here Comes The Sun",
     accepted: ["here comes the sun"],
     artist: "The Beatles",
@@ -338,7 +338,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 15,
-    formal: "Oscillatory Bodily Movements Performed In Proximity To A Petroleum-Based Combustible",
+    formal: "Oscillatory Bodily Movements Performed In The Absence Of Adequate Lighting Conditions",
     answer: "Dancing In The Dark",
     accepted: ["dancing in the dark"],
     artist: "Bruce Springsteen",
@@ -349,9 +349,9 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 16,
-    formal: "Solicitation For Protective Shelter From Atmospheric Precipitation",
+    formal: "Solicitation For Protective Shelter Under A Portable Waterproof Canopy During Atmospheric Precipitation",
     answer: "Umbrella",
-    accepted: ["umbrella", "rihanna umbrella"],
+    accepted: ["umbrella"],
     artist: "Rihanna",
     era: "2000s",
     genre: "R&B / Pop",
@@ -360,7 +360,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 17,
-    formal: "Mandatory Communal Recreational Activity For All Participants Present",
+    formal: "Mandatory Communal Rhythmic Movement Required Of All Individuals Currently Present",
     answer: "Everybody Dance Now",
     accepted: ["everybody dance now", "gonna make you sweat everybody dance now"],
     artist: "C+C Music Factory",
@@ -371,7 +371,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 18,
-    formal: "Categorical Refusal Of Interpersonal Emotional Surrender",
+    formal: "Categorical Refusal To Ever Abandon, Deceive, Or Emotionally Withdraw From The Recipient",
     answer: "Never Gonna Give You Up",
     accepted: ["never gonna give you up", "never going to give you up"],
     artist: "Rick Astley",
@@ -382,7 +382,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 19,
-    formal: "Affirmative Declaration Of Sustained Romantic Dedication",
+    formal: "Affirmative Declaration Of Sustained Romantic Devotion To Be Maintained In Perpetuity",
     answer: "I Will Always Love You",
     accepted: ["i will always love you", "i'll always love you"],
     artist: "Whitney Houston",
@@ -393,18 +393,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 20,
-    formal: "Epistemological Inquiry Regarding The Precise Coordinates Of Nocturnal Temporal Position",
-    answer: "Do You Know What Time It Is",
-    accepted: ["do you know what time it is", "what time is it"],
-    artist: "Various",
-    era: "Various",
-    genre: "Pop",
-    firstLetters: "W T I I",
-    difficulty: "hard",
+    formal: "Urgent Directive Issued To A Male Individual To Immediately Vacate The Premises And Avoid An Imminent Physical Altercation",
+    answer: "Beat It",
+    accepted: ["beat it"],
+    artist: "Michael Jackson",
+    era: "1980s",
+    genre: "Pop / Rock",
+    firstLetters: "B I",
+    difficulty: "medium",
   },
   {
     id: 21,
-    formal: "Auditory Hallucination Of Ceremonial Bell Structures During Festive Season",
+    formal: "Auditory Simulation Of Ceremonial Resonating Bell Structures During The Festive Winter Season",
     answer: "Jingle Bells",
     accepted: ["jingle bells"],
     artist: "Traditional",
@@ -415,7 +415,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 22,
-    formal: "Voluntary Departure From Established Terrestrial Coordinates",
+    formal: "Personal Declaration That One Was Predestined From Birth To Engage In High-Velocity Ambulatory Pursuit Of Freedom",
     answer: "Born To Run",
     accepted: ["born to run"],
     artist: "Bruce Springsteen",
@@ -426,7 +426,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 23,
-    formal: "Persistent Psychological Torment Inflicted By A Departed Romantic Partner",
+    formal: "Persistent Psychological Torment Inflicted By The Lingering Memory Of A Departed Romantic Partner",
     answer: "Someone Like You",
     accepted: ["someone like you"],
     artist: "Adele",
@@ -437,7 +437,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 24,
-    formal: "Inaugural Oscillatory Rhythmic Event Of The Calendar Year",
+    formal: "Formal Conferral Of Supreme Rhythmic Sovereignty Upon A Young Female Individual Aged Seventeen On A Friday Evening",
     answer: "Dancing Queen",
     accepted: ["dancing queen"],
     artist: "ABBA",
@@ -448,7 +448,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 25,
-    formal: "Proposition To Conduct Oneself In A Manner Consistent With Equine Transportation",
+    formal: "Proposition To Conduct Oneself In A Manner Consistent With Equine Transportation Along A Rural Historic Route",
     answer: "Old Town Road",
     accepted: ["old town road", "take my horse to the old town road"],
     artist: "Lil Nas X",
@@ -459,7 +459,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 26,
-    formal: "Gravitational Force Compelling Repeated Descent To Proximate Ground Level",
+    formal: "Persistent Gravitational Force Compelling Repeated Involuntary Descent To Ground Level",
     answer: "Falling",
     accepted: ["falling", "keep on falling"],
     artist: "Harry Styles",
@@ -470,7 +470,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 27,
-    formal: "Unrestricted Melodic Emission Without Regard For Consequences",
+    formal: "Directive To Release, Relinquish, And Allow The Situation To Proceed Without Further Attempt At Control",
     answer: "Let It Go",
     accepted: ["let it go"],
     artist: "Idina Menzel",
@@ -481,7 +481,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 28,
-    formal: "Inquiry Regarding The Temporal Coordinates Of The Post-Meridian Period",
+    formal: "Enthusiastic Proposal To Engage In Rhythmic Musical Activity Continuously Throughout The Entire Twenty-Four Hour Temporal Cycle",
     answer: "Rock Around The Clock",
     accepted: ["rock around the clock", "we're gonna rock around the clock"],
     artist: "Bill Haley & His Comets",
@@ -492,7 +492,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 29,
-    formal: "Mutual Acknowledgement Of Intellectual Capacity Within A Romantic Partnership",
+    formal: "State Of Romantic Infatuation So Intense It Has Demonstrably Impaired The Subject's Rational Cognitive Faculties",
     answer: "Crazy In Love",
     accepted: ["crazy in love"],
     artist: "Beyoncé",
@@ -503,7 +503,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 30,
-    formal: "Longitudinal Traversal Of A Narrow Pedestrian Infrastructure",
+    formal: "Longitudinal Traversal Of A Narrow Pedestrian Infrastructure In The Specified Manner",
     answer: "Walk This Way",
     accepted: ["walk this way"],
     artist: "Aerosmith / Run DMC",
@@ -514,7 +514,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 31,
-    formal: "Nocturnal Conflagration Of Cardiac Origin",
+    formal: "Exclamatory Declaration Regarding An Exceptionally Large And Impressive Configuration Of Combusting Spherical Matter",
     answer: "Great Balls Of Fire",
     accepted: ["great balls of fire"],
     artist: "Jerry Lee Lewis",
@@ -525,7 +525,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 32,
-    formal: "Directive To Maintain Current Positional State And Emit Vocalizations",
+    formal: "Emotional Entreaty For A Trusted Companion To Remain Physically Present During Times Of Personal Darkness And Fear",
     answer: "Stand By Me",
     accepted: ["stand by me"],
     artist: "Ben E. King",
@@ -536,7 +536,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 33,
-    formal: "Sequential Positional Displacement In A Downward Vertical Trajectory",
+    formal: "Grand Ascending Architectural Structure Of Sequential Steps Providing Progressive Access To The Celestial Afterlife",
     answer: "Stairway To Heaven",
     accepted: ["stairway to heaven"],
     artist: "Led Zeppelin",
@@ -547,7 +547,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 34,
-    formal: "Atmospheric Particulate Matter Displaced By Tempestuous Breeze",
+    formal: "Atmospheric Particulate Matter Carried And Displaced By A Tempestuous Breeze",
     answer: "Dust In The Wind",
     accepted: ["dust in the wind"],
     artist: "Kansas",
@@ -558,7 +558,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 35,
-    formal: "Melancholic Disposition Regarding Departed Lunar Satellite Proximity",
+    formal: "Romantic Petition For Immediate Aerial Transportation To The Nearest Lunar Satellite And Adjacent Celestial Bodies",
     answer: "Fly Me To The Moon",
     accepted: ["fly me to the moon"],
     artist: "Frank Sinatra",
@@ -569,18 +569,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 36,
-    formal: "Formal Declaration That One's Affective State Remains Satisfactory",
-    answer: "I'm Fine",
-    accepted: ["i'm fine", "im fine", "i am fine"],
-    artist: "Various",
-    era: "Various",
-    genre: "Pop",
-    firstLetters: "I F",
-    difficulty: "hard",
+    formal: "Sincere Invitation To Utilise The Speaker As A Physical And Emotional Support Structure During Periods Of Personal Adversity",
+    answer: "Lean on Me",
+    accepted: ["lean on me"],
+    artist: "Bill Withers",
+    era: "1970s",
+    genre: "Soul / R&B",
+    firstLetters: "L M",
+    difficulty: "easy",
   },
   {
     id: 37,
-    formal: "Regulatory Prohibition Against Unsolicited Emotional Precipitation Manifestation",
+    formal: "Regulatory Prohibition Against Unsolicited Emotional Precipitation Emanating From The Cardiac Region",
     answer: "Stop Crying Your Heart Out",
     accepted: ["stop crying your heart out"],
     artist: "Oasis",
@@ -602,20 +602,20 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 39,
-    formal: "Geographic Inquiry Directed At Domicile Of Cardiac Muscle",
+    formal: "Geographic Inquiry Directed At The Current Domicile Of Interpersonal Affection",
     answer: "Where Is The Love",
     accepted: ["where is the love"],
     artist: "The Black Eyed Peas",
     era: "2000s",
     genre: "Hip-Hop / R&B",
-    firstLetters: "W I L",
+    firstLetters: "W I T L",
     difficulty: "easy",
   },
   {
     id: 40,
-    formal: "Unilateral Cessation Of Nutritional Intake Motivated By Interpersonal Affection",
-    answer: "Hungry Eyes",
-    accepted: ["hungry eyes", "hungry like the wolf"],
+    formal: "Self-Description As A Famished Predatory Canine, Employed As A Metaphor For The Speaker's Relentless Instinct-Driven Romantic Pursuit",
+    answer: "Hungry Like the Wolf",
+    accepted: ["hungry like the wolf"],
     artist: "Duran Duran",
     era: "1980s",
     genre: "New Wave / Pop",
@@ -624,7 +624,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 41,
-    formal: "Mandatory Relocation Of Physical Self To A Superior Geographic Position",
+    formal: "Mandatory Relocation Of Physical Self To A Geographically Superior And Elevated Position",
     answer: "Higher Ground",
     accepted: ["higher ground"],
     artist: "Stevie Wonder",
@@ -635,9 +635,9 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 42,
-    formal: "Bilateral Osculation Of Interpersonal Significance On This Particular Occasion",
+    formal: "Imperative Request For A Brief Instance Of Bilateral Oral Contact As An Act Of Interpersonal Affection",
     answer: "Kiss",
-    accepted: ["kiss", "i just called to say i love you"],
+    accepted: ["kiss"],
     artist: "Prince",
     era: "1980s",
     genre: "Funk / Pop",
@@ -646,7 +646,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 43,
-    formal: "Voluntary Ambulatory Departure From The Premises Of Emotional Distress",
+    formal: "Buoyant Perambulation Atop Concentrated Solar Radiation, Accompanied By An Overwhelming Sensation Of Newly Discovered Romantic Joy",
     answer: "Walking On Sunshine",
     accepted: ["walking on sunshine"],
     artist: "Katrina And The Waves",
@@ -657,7 +657,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 44,
-    formal: "Nocturnal Ceremonial Gathering In A City Of Resplendent Illumination",
+    formal: "Enthusiastic Endorsement Of The Continued Prosperous Existence Of A Glittering Illuminated Desert Gambling City",
     answer: "Viva Las Vegas",
     accepted: ["viva las vegas"],
     artist: "Elvis Presley",
@@ -668,7 +668,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 45,
-    formal: "Autobiographical Account Of Sustained Interpersonal Conflict And Reconciliation",
+    formal: "Narrative Of Romantic Betrayal Accompanied By The Speaker's Immersion In The Profound Emotional Depths Of Grief And Anger",
     answer: "Rolling In The Deep",
     accepted: ["rolling in the deep"],
     artist: "Adele",
@@ -679,7 +679,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 46,
-    formal: "Formal Notification Of Forthcoming Atmospheric Deterioration",
+    formal: "Formal Notification That Atmospheric Precipitation Is Once Again Imminent, Arriving Like An Unwanted Emotional Memory",
     answer: "Here Comes The Rain Again",
     accepted: ["here comes the rain again"],
     artist: "Eurythmics",
@@ -690,7 +690,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 47,
-    formal: "Simultaneous Bilateral Ambulatory Exercise In Close Interpersonal Proximity",
+    formal: "Instruction To Adopt The Stylised Laterally-Angled Pedestrian Posture Depicted In Ancient North African Hieroglyphic Art",
     answer: "Walk Like An Egyptian",
     accepted: ["walk like an egyptian"],
     artist: "The Bangles",
@@ -701,9 +701,9 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 48,
-    formal: "Regulatory Framework Governing The Appropriate Conduct Of Romantic Engagement",
-    answer: "The Rules",
-    accepted: ["rules", "the rules", "new rules"],
+    formal: "Freshly Issued Personal Regulatory Code Governing The Speaker's Behaviour Following The Termination Of A Romantic Relationship",
+    answer: "New Rules",
+    accepted: ["new rules"],
     artist: "Dua Lipa",
     era: "2010s",
     genre: "Pop",
@@ -712,7 +712,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 49,
-    formal: "Iterative Computational Enumeration Of Ovine Livestock For Sleep Induction",
+    formal: "Nocturnal Practice Of Enumerating Luminous Celestial Bodies As An Expression Of Aspirational Longing And Spiritual Restlessness",
     answer: "Counting Stars",
     accepted: ["counting stars"],
     artist: "OneRepublic",
@@ -723,7 +723,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 50,
-    formal: "Mandatory Continuation Of Vertebral Column Oscillation Despite Adversarial Circumstances",
+    formal: "Persistent Imperative To Maintain Continuous Forward Momentum Regardless Of All External Obstacles",
     answer: "Keep On Movin'",
     accepted: ["keep on movin", "keep on moving", "keep on movin'"],
     artist: "Soul II Soul",
@@ -734,7 +734,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 51,
-    formal: "Extensive Ceremonial Narrative Of An Exceptional Equine-Mounted Departure",
+    formal: "Theatrical Dramatic Confession From A Free-Spirited Individual Who Has Committed An Unspecified Capital Crime And Must Confront Its Consequences",
     answer: "Bohemian Rhapsody",
     accepted: ["bohemian rhapsody"],
     artist: "Queen",
@@ -745,7 +745,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 52,
-    formal: "Solemn Avowal Of Geographical Preference Over Subterranean Habitation",
+    formal: "Persistent Involuntary Mental Transportation To A Warm Sunlit West Coast State, Experienced During Cold Grey Winter Conditions",
     answer: "California Dreamin'",
     accepted: ["california dreamin", "california dreaming", "california dreamin'"],
     artist: "The Mamas & The Papas",
@@ -756,7 +756,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 53,
-    formal: "Directive To Maintain Continuous Pursuit Of Aspirational Objectives",
+    formal: "Steadfast Prohibition Against The Cessation Of One's Fundamental Hope And Faith In The Possibility Of A Better Future",
     answer: "Don't Stop Believin'",
     accepted: ["dont stop believin", "don't stop believin", "don't stop believing"],
     artist: "Journey",
@@ -767,7 +767,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 54,
-    formal: "Systematic Nomenclatural Cataloguing Of Favoured Atmospheric Phenomena",
+    formal: "Optimistic Enumeration Of Personally Preferred Sensory Experiences, Compiled As A Coping Mechanism For Fear And Sadness",
     answer: "My Favorite Things",
     accepted: ["my favorite things", "my favourite things"],
     artist: "Julie Andrews",
@@ -778,7 +778,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 55,
-    formal: "Entreaty For Celestial Deity's Comedic Benevolence Upon Sovereign Authority",
+    formal: "Official Supplication To The Almighty For The Protection And Preservation Of The Reigning Sovereign",
     answer: "God Save The King",
     accepted: ["god save the king", "god save the queen"],
     artist: "Traditional",
@@ -789,18 +789,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 56,
-    formal: "Prolonged Nocturnal Vocal Emission Toward Lunar Celestial Body",
-    answer: "Howling at the Moon",
-    accepted: ["howling at the moon", "total eclipse of the heart"],
-    artist: "Bonnie Tyler",
-    era: "1980s",
-    genre: "Rock / Power Ballad",
-    firstLetters: "T E H",
+    formal: "Expansive Natural Waterway Named After The Lunar Satellite, To Be Crossed In Partnership With A Like-Minded Companion Pursuing Life's Wonders",
+    answer: "Moon River",
+    accepted: ["moon river"],
+    artist: "Henry Mancini / Audrey Hepburn",
+    era: "1960s",
+    genre: "Jazz / Soundtrack",
+    firstLetters: "M R",
     difficulty: "hard",
   },
   {
     id: 57,
-    formal: "Requisition For Continued Presence In Temporal Proximity",
+    formal: "Heartfelt Request For A Companion To Remain Present And Not Depart On This Particular Evening",
     answer: "Stay With Me",
     accepted: ["stay with me"],
     artist: "Sam Smith",
@@ -811,7 +811,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 58,
-    formal: "Solemn Vow To Preserve One's Affection In Perpetuity Regardless Of Geographic Separation",
+    formal: "Solemn Vow To Preserve One's Affection For An Individual Regardless Of Distance Or Circumstance",
     answer: "No Matter What",
     accepted: ["no matter what"],
     artist: "Boyzone",
@@ -822,7 +822,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 59,
-    formal: "Inquiry Into Whether A Particular Individual Has Been Notified Of Temporal Occasion",
+    formal: "Traditional Communal Vocalisation Conveying Celebratory Greetings To An Individual On The Annual Anniversary Of Their Birth",
     answer: "Happy Birthday To You",
     accepted: ["happy birthday to you", "happy birthday"],
     artist: "Traditional",
@@ -833,9 +833,9 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 60,
-    formal: "Proposed Recreational Excursion To A Subterranean Mineral Formation",
-    answer: "Rock Around The Clock",
-    accepted: ["rock the casbah", "rock around the clock"],
+    formal: "Official Report That A Royal Authority Has Ordered The Musical Disruption Of A Fortified North African Citadel, Against The Wishes Of The Local Populace",
+    answer: "Rock The Casbah",
+    accepted: ["rock the casbah"],
     artist: "The Clash",
     era: "1980s",
     genre: "Punk / Rock",
@@ -844,18 +844,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 61,
-    formal: "Meteorological Conditions Conducive To Mutual Romantic Ambulation",
-    answer: "Walking In The Rain",
-    accepted: ["walking in the rain", "a walk in the rain"],
-    artist: "Various",
-    era: "Various",
-    genre: "Pop",
-    firstLetters: "W I R",
+    formal: "Atmospheric Precipitation In An Unconventional Royal Chromatic Hue, Serving As Metaphor For Emotional Sacrifice And Transcendent Love",
+    answer: "Purple Rain",
+    accepted: ["purple rain"],
+    artist: "Prince",
+    era: "1980s",
+    genre: "Pop / Rock",
+    firstLetters: "P R",
     difficulty: "hard",
   },
   {
     id: 62,
-    formal: "Voluntary Cardiac Abandonment In Favour Of Absent Party",
+    formal: "Declaration That The Speaker's Cardiac Organ Shall Continue Its Emotional Operations Indefinitely Despite The Recipient's Departure",
     answer: "My Heart Will Go On",
     accepted: ["my heart will go on"],
     artist: "Celine Dion",
@@ -866,7 +866,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 63,
-    formal: "Formal Request For Continued Exclusive Interpersonal Devotion",
+    formal: "Romantic Offer Of The Speaker's Complete And Undivided Totality To The Recipient, Including All Imperfections",
     answer: "All of Me",
     accepted: ["all of me"],
     artist: "John Legend",
@@ -877,18 +877,18 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 64,
-    formal: "Theoretical Examination Of Hypothetical Optimal Romantic Outcomes",
-    answer: "What If",
-    accepted: ["what if", "if only"],
-    artist: "Various",
-    era: "Various",
-    genre: "Pop",
-    firstLetters: "W I",
+    formal: "Proclamation Of Exceptional Structural Invulnerability Named After The Lightest And Strongest Commercially Available Metallic Element",
+    answer: "Titanium",
+    accepted: ["titanium"],
+    artist: "David Guetta ft. Sia",
+    era: "2010s",
+    genre: "Electronic / Pop",
+    firstLetters: "T",
     difficulty: "hard",
   },
   {
     id: 65,
-    formal: "Inebriated Confessional Revelation Of Previously Undisclosed Affective States",
+    formal: "State Of Romantic Intoxication So Extreme That The Subject's Normal Rational Faculties Have Been Entirely Compromised By Passion",
     answer: "Drunk In Love",
     accepted: ["drunk in love"],
     artist: "Beyoncé",
@@ -901,7 +901,7 @@ export const puzzles: Puzzle[] = [
   // ── Easy additions ────────────────────────────────────────────
   {
     id: 66,
-    formal: "Chromatic Designation Of The Spectral Frequency Associated With Solar Illumination, Applied As Descriptor Of An Individual's Luminous Personal Qualities",
+    formal: "Astronomical Colour Classification Assigned To Luminous Celestial Bodies, Applied As A Term Of Devotion To A Cherished Individual",
     answer: "Yellow",
     accepted: ["yellow"],
     artist: "Coldplay",
@@ -912,7 +912,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 67,
-    formal: "Stated Intention To Restore Optimal Functional Capacity To A Damaged Or Malfunctioning Individual",
+    formal: "Stated Intention To Restore Optimal Functional Capacity To A Damaged Or Emotionally Malfunctioning Individual",
     answer: "Fix You",
     accepted: ["fix you"],
     artist: "Coldplay",
@@ -923,7 +923,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 68,
-    formal: "Imperative Directive Instructing The Speaker To Cease Retention Of A Female Individual",
+    formal: "Imperative Directive Instructing The Speaker To Release And Cease Retaining A Female Individual",
     answer: "Let Her Go",
     accepted: ["let her go"],
     artist: "Passenger",
@@ -934,7 +934,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 69,
-    formal: "Underwater Naval Vessel Of A Chromatic Yellow Hue, Occupied Communally By A Group Of Affiliated Individuals",
+    formal: "Underwater Naval Vessel Of A Chromatic Yellow Hue, Jointly Occupied By A Cohesive Group Of Associated Individuals",
     answer: "Yellow Submarine",
     accepted: ["yellow submarine"],
     artist: "The Beatles",
@@ -945,7 +945,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 70,
-    formal: "Informal Oral Claim Upon The Preferred Front Passenger Position Within A Motor Vehicle",
+    formal: "Informal Oral Claim Upon The Preferred Front Passenger Seat Within A Motor Vehicle",
     answer: "Shotgun",
     accepted: ["shotgun"],
     artist: "George Ezra",
@@ -958,7 +958,7 @@ export const puzzles: Puzzle[] = [
   // ── Medium additions ──────────────────────────────────────────
   {
     id: 71,
-    formal: "Practice Of Externalising Internal Cognitive Deliberations In Vocal Form, In The Context Of An Enduring Romantic Commitment",
+    formal: "Practice Of Externalising Internal Cognitive Deliberations In Vocal Form Within The Context Of An Enduring Romantic Commitment",
     answer: "Thinking Out Loud",
     accepted: ["thinking out loud"],
     artist: "Ed Sheeran",
@@ -980,7 +980,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 73,
-    formal: "Theological Intermediary Beings Of Divine Origin Invoked As Protective Companions During Periods Of Personal Difficulty",
+    formal: "Celestial Winged Intermediary Beings Invoked As Protective Companions During Periods Of Personal Difficulty",
     answer: "Angels",
     accepted: ["angels"],
     artist: "Robbie Williams",
@@ -991,7 +991,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 74,
-    formal: "Ambulatory Transit Along An Urban Thoroughfare Characterised By Failed Aspirations And A Persistent State Of Solitary Existential Contemplation",
+    formal: "Solitary Ambulatory Transit Along An Urban Thoroughfare Lined With The Remnants Of Failed Aspirations",
     answer: "Boulevard of Broken Dreams",
     accepted: ["boulevard of broken dreams"],
     artist: "Green Day",
@@ -1004,7 +1004,7 @@ export const puzzles: Puzzle[] = [
   // ── Hard additions ────────────────────────────────────────────
   {
     id: 75,
-    formal: "Reclassification Of A Previously Intimate Associate To The Undifferentiated Status Of An Unrecognised Member Of The General Population",
+    formal: "Reclassification Of A Previously Intimate Associate To The Status Of An Unrecognised Member Of The General Population",
     answer: "Somebody That I Used to Know",
     accepted: ["somebody that i used to know"],
     artist: "Gotye ft. Kimbra",
@@ -1015,7 +1015,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 76,
-    formal: "Biochemically Hazardous Compound Introduced Into The Interpersonal Relationship Via Romantic Interaction, Producing Progressive Physiological And Psychological Deterioration",
+    formal: "Biochemically Hazardous Compound Introduced Via Romantic Interaction, Producing Progressive Physiological And Psychological Deterioration",
     answer: "Toxic",
     accepted: ["toxic"],
     artist: "Britney Spears",
@@ -1026,7 +1026,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 77,
-    formal: "Formal Categorisation Of An Interpersonal Attachment As Fundamentally Defective, Paradoxically Combined With Voluntary Re-engagement In Said Attachment",
+    formal: "Categorisation Of An Interpersonal Attachment As Fundamentally Defective, Paradoxically Combined With Voluntary Re-Engagement In Said Attachment",
     answer: "Bad Romance",
     accepted: ["bad romance"],
     artist: "Lady Gaga",
@@ -1037,7 +1037,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 78,
-    formal: "Extreme Photonic Stimulation Of The Ocular System During Nocturnal Urban Transit, Causing Temporary Impairment Of Clear Visual Perception",
+    formal: "Extreme Photonic Stimulation Of The Ocular System During Nocturnal Urban Transit, Causing Temporary Impairment Of Visual Perception",
     answer: "Blinding Lights",
     accepted: ["blinding lights"],
     artist: "The Weeknd",
@@ -1048,7 +1048,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 79,
-    formal: "Topographical Survey Of The Anatomical Contours Of A Specific Individual, Designated As The Primary Object Of Aesthetic And Romantic Appreciation",
+    formal: "Topographical Survey Of The Anatomical Contours Of A Specific Individual Designated As The Primary Object Of Aesthetic And Romantic Appreciation",
     answer: "Shape of You",
     accepted: ["shape of you"],
     artist: "Ed Sheeran",
@@ -1070,7 +1070,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 81,
-    formal: "Iterative Maternal Invocation Uttered Upon The Unexpected Re-Presentation Of A Previously Dismissed Former Romantic Partner",
+    formal: "Repeated Invocation Of A Female Parental Figure Upon The Surprise Re-Appearance Of A Previously Dismissed Former Romantic Partner",
     answer: "Mamma Mia",
     accepted: ["mamma mia"],
     artist: "ABBA",
@@ -1081,7 +1081,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 82,
-    formal: "Regulatory Framework Specifying That The Victorious Party In A Competitive Adjudication Acquires Exclusive Entitlement To All Available Prizes And Compensations",
+    formal: "Regulatory Principle Stipulating That The Victorious Party In A Competition Acquires Exclusive Entitlement To All Available Prizes",
     answer: "The Winner Takes It All",
     accepted: ["the winner takes it all", "winner takes it all"],
     artist: "ABBA",
@@ -1092,7 +1092,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 83,
-    formal: "Imperative Solicitation For An Individual To Willingly Accept The Challenge Of Engaging In A Romantic Pursuit With The Speaking Party",
+    formal: "Imperative Solicitation For An Individual To Willingly Accept The Speaker's Romantic Challenge",
     answer: "Take On Me",
     accepted: ["take on me"],
     artist: "a-ha",
@@ -1103,7 +1103,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 84,
-    formal: "Terminal Sequential Numerical Reduction Preceding A Significant Departure Or Event Of Great Personal Or Collective Consequence",
+    formal: "Terminal Sequential Numerical Reduction Preceding An Event Of Great Personal Or Collective Consequence",
     answer: "The Final Countdown",
     accepted: ["the final countdown", "final countdown"],
     artist: "Europe",
@@ -1114,7 +1114,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 85,
-    formal: "Affectionate Diminutive Address To A Juvenile Individual Whose Physical Characteristics Evoke Powerful Nostalgic And Romantic Associations In The Speaker",
+    formal: "Affectionate Address To A Juvenile Individual Whose Physical Characteristics Evoke Powerful Nostalgic And Romantic Associations In The Speaker",
     answer: "Sweet Child O' Mine",
     accepted: ["sweet child o mine", "sweet child of mine", "sweet child o' mine"],
     artist: "Guns N' Roses",
@@ -1125,7 +1125,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 86,
-    formal: "Atmospheric Precipitation Occurring During The Penultimate Calendar Month, Functioning As Extended Metaphor For The Progressive Deterioration Of A Romantic Partnership",
+    formal: "Atmospheric Precipitation Occurring In The Penultimate Calendar Month, Functioning As Extended Metaphor For The Progressive Deterioration Of A Romantic Partnership",
     answer: "November Rain",
     accepted: ["november rain"],
     artist: "Guns N' Roses",
@@ -1147,7 +1147,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 88,
-    formal: "Hypothetical Utopian Municipality Distinguished By Optimal Ground-Level Vegetation Coverage And A Population Of Exceptionally Attractive Female Residents",
+    formal: "Hypothetical Utopian Municipality Distinguished By Optimal Ground-Level Vegetation And A Population Of Exceptionally Attractive Female Residents",
     answer: "Paradise City",
     accepted: ["paradise city"],
     artist: "Guns N' Roses",
@@ -1158,7 +1158,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 89,
-    formal: "Collective First-Person Declaration Of Competitive Supremacy Issued On Behalf Of An Assembled Group Of Victorious Individuals To The General Populace",
+    formal: "Collective First-Person Declaration Of Competitive Supremacy Issued On Behalf Of A Victorious Group To The General Populace",
     answer: "We Are the Champions",
     accepted: ["we are the champions"],
     artist: "Queen",
@@ -1169,7 +1169,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 90,
-    formal: "Nonsensical Repetitive Exclamations Directed At A Traditional Broadcast Audio Transmission Medium, Lamenting Its Gradual Displacement By Visual Technologies",
+    formal: "Nonsensical Repetitive Exclamations Directed At A Broadcast Audio Transmission Medium, Lamenting Its Gradual Displacement By Visual Technologies",
     answer: "Radio Ga Ga",
     accepted: ["radio ga ga", "radio gaga"],
     artist: "Queen",
@@ -1180,7 +1180,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 91,
-    formal: "Syncopated Afro-American Musical Composition Originating From The Affluent Northern Quarter Of An Unspecified Metropolitan Area, Asserting Its Own Cultural Superiority",
+    formal: "Rhythmically Sophisticated Musical Composition Originating From The Affluent Northern Quarter Of An Unspecified Metropolitan Area, Asserting Its Own Cultural Superiority",
     answer: "Uptown Funk",
     accepted: ["uptown funk"],
     artist: "Mark Ronson ft. Bruno Mars",
@@ -1191,7 +1191,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 92,
-    formal: "Unilateral Verbal Expression Of Remorse And Contrition Tendered By The Speaker To An Individual Who Has Sustained Demonstrable Harm Due To The Speaker's Prior Conduct",
+    formal: "Unilateral Verbal Expression Of Remorse And Contrition Tendered To An Individual Who Sustained Harm Due To The Speaker's Prior Conduct",
     answer: "Sorry",
     accepted: ["sorry"],
     artist: "Justin Bieber",
@@ -1202,7 +1202,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 93,
-    formal: "Therapeutic Directive Encouraging An Individual To Redirect Misallocated External Affection Inward, Offered As Unsolicited Counsel To A Former Partner",
+    formal: "Therapeutic Directive Encouraging An Individual To Redirect Misallocated External Affection Inward As Unsolicited Counsel To A Former Partner",
     answer: "Love Yourself",
     accepted: ["love yourself"],
     artist: "Justin Bieber",
@@ -1213,7 +1213,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 94,
-    formal: "Incremental Instructional Directive For The Progressive Deceleration Of All Aspects Of An Interpersonal Encounter To The Minimum Viable Operational Velocity",
+    formal: "Incremental Directive For The Progressive Deceleration Of All Aspects Of An Interpersonal Encounter To The Minimum Viable Operational Velocity",
     answer: "Despacito",
     accepted: ["despacito"],
     artist: "Luis Fonsi ft. Daddy Yankee",
@@ -1224,7 +1224,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 95,
-    formal: "Interrogative Challenge Posed By A Speaker To A Former Partner Regarding Whether Any Residual Desire For The Speaker's Continued Companionship Has Been Retained",
+    formal: "Interrogative Challenge Directed At A Former Partner Regarding Whether They Retain Any Residual Desire For The Speaker's Companionship",
     answer: "Don't You Want Me",
     accepted: ["dont you want me", "don't you want me"],
     artist: "The Human League",
@@ -1235,7 +1235,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 96,
-    formal: "Urgent Entreaty Directed At A Named Female Individual To Respond Favourably To The Speaker's Romantic Overtures At This Particular Juncture",
+    formal: "Urgent Entreaty Directed At A Named Female Individual To Respond Favourably To The Speaker's Romantic Overtures At This Juncture",
     answer: "Come On Eileen",
     accepted: ["come on eileen"],
     artist: "Dexys Midnight Runners",
@@ -1246,7 +1246,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 97,
-    formal: "Formal Declaration Of Romantic Interest In The Primary Maternal Guardian Of A Named Female Acquaintance, Rather Than Said Acquaintance Herself",
+    formal: "Formal Declaration Of Romantic Interest In The Primary Maternal Guardian Of A Named Female Acquaintance Rather Than Said Acquaintance Herself",
     answer: "Stacy's Mom",
     accepted: ["stacys mom", "stacy's mom"],
     artist: "Fountains of Wayne",
@@ -1257,7 +1257,7 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 98,
-    formal: "Nostalgic Address Directed At A Named Male Companion, Recalling A Shared Experience Of Armed Conflict Conducted Under Favourable Nocturnal Celestial Conditions",
+    formal: "Nostalgic Address Directed At A Named Male Companion, Recalling A Shared Experience Of Armed Conflict Under Favourable Nocturnal Celestial Conditions",
     answer: "Fernando",
     accepted: ["fernando"],
     artist: "ABBA",
@@ -1268,13 +1268,13 @@ export const puzzles: Puzzle[] = [
   },
   {
     id: 99,
-    formal: "Internationally Standardised Emergency Distress Signal Transmitted Under Conditions Of Acute And Irresolvable Romantic Crisis",
+    formal: "Internationally Standardised Emergency Distress Signal Transmitted Under Conditions Of Acute Romantic Crisis",
     answer: "SOS",
     accepted: ["sos"],
     artist: "ABBA",
     era: "1970s",
     genre: "Pop",
-    firstLetters: "S O S",
+    firstLetters: "S",
     difficulty: "hard",
   },
   {
@@ -1289,8 +1289,8 @@ export const puzzles: Puzzle[] = [
     difficulty: "hard",
   },
   {
-    id: 106,
-    formal: "Collective Directive Requiring The Convergence Of Multiple Distinct And Disparate Parties Toward A Single Unified Location Or Purpose",
+    id: 116,
+    formal: "Collective Directive Requiring The Convergence Of Multiple Distinct And Disparate Parties Toward A Single Unified Purpose",
     answer: "Come Together",
     accepted: ["come together"],
     artist: "The Beatles",
@@ -1300,8 +1300,8 @@ export const puzzles: Puzzle[] = [
     difficulty: "hard",
   },
   {
-    id: 107,
-    formal: "Romantic Affection That Has Been Irreversibly Contaminated Or Corrupted By External Forces, Rendering It Unsuitable For Continued Consumption",
+    id: 117,
+    formal: "Romantic Affection That Has Been Irreversibly Contaminated By External Forces, Rendering It Unsuitable For Continued Consumption",
     answer: "Tainted Love",
     accepted: ["tainted love"],
     artist: "Soft Cell",
@@ -1311,8 +1311,8 @@ export const puzzles: Puzzle[] = [
     difficulty: "hard",
   },
   {
-    id: 108,
-    formal: "Persistent Adherence To Irrational Belief Systems Postulating A Causal Relationship Between Arbitrary Actions And Subsequent Events",
+    id: 118,
+    formal: "Persistent Adherence To Irrational Beliefs Postulating A Causal Relationship Between Arbitrary Ritual Actions And Subsequent Real-World Events",
     answer: "Superstition",
     accepted: ["superstition"],
     artist: "Stevie Wonder",
@@ -1322,8 +1322,8 @@ export const puzzles: Puzzle[] = [
     difficulty: "hard",
   },
   {
-    id: 109,
-    formal: "Documentation Of A Female Individual's Capacity To Induce Severe Psychological Disturbance In The Speaker Through The Performance Of Ordinary Daily Activities",
+    id: 119,
+    formal: "Documentation Of A Female Individual's Capacity To Induce Severe Psychological Disturbance In The Speaker Through Ordinary Daily Activities",
     answer: "She Drives Me Crazy",
     accepted: ["she drives me crazy"],
     artist: "Fine Young Cannibals",
@@ -1333,8 +1333,8 @@ export const puzzles: Puzzle[] = [
     difficulty: "hard",
   },
   {
-    id: 110,
-    formal: "Unadulterated And Uncontaminated Cognitive Faculty For Generating Novel Mental Constructs That Transcend The Established Boundaries Of Physical Reality",
+    id: 120,
+    formal: "Uncontaminated Cognitive Faculty For Generating Novel Mental Constructs That Transcend The Established Boundaries Of Physical Reality",
     answer: "Pure Imagination",
     accepted: ["pure imagination"],
     artist: "Gene Wilder",

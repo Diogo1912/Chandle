@@ -165,6 +165,6 @@ export function buildShareText(params: {
     rows.join(''),
     hintRow,
     '',
-    'chandle.vercel.app',
+    'https://chandle.vercel.app',
   ].join('\n');
 }
