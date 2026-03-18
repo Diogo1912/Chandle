@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { buildShareText } from '@/lib/gameLogic';
+import { track } from '@/lib/posthog';
 
 interface ShareCardProps {
   guesses: string[];
@@ -9,6 +10,7 @@ interface ShareCardProps {
   solved: boolean;
   dayIndex: number;
   formalTitle: string;
+  puzzleId: number;
 }
 
 export default function ShareCard({
@@ -17,6 +19,7 @@ export default function ShareCard({
   solved,
   dayIndex,
   formalTitle,
+  puzzleId,
 }: ShareCardProps) {
   const [copied, setCopied] = useState(false);
 
@@ -49,6 +52,13 @@ export default function ShareCard({
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
+
+    track('share_clicked', {
+      puzzle_id: puzzleId,
+      solved,
+      attempts: guesses.length,
+      hints_used: hintsUnlocked,
+    });
   }
 
   return (

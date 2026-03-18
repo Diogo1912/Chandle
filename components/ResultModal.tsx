@@ -137,6 +137,7 @@ export default function ResultModal({
             solved={solved}
             dayIndex={dayIndex}
             formalTitle={puzzle.formal}
+            puzzleId={puzzle.id}
           />
         </div>
 

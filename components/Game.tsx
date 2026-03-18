@@ -12,6 +12,7 @@ import HintSystem from './HintSystem';
 import ResultModal from './ResultModal';
 import HowToModal from './HowToModal';
 import BonusSection from './BonusSection';
+import { initPostHog, track } from '@/lib/posthog';
 
 const MAX_GUESSES = 6;
 
@@ -51,6 +52,13 @@ export default function Game() {
     if (initial.solved || initial.revealed || initial.guesses.length >= MAX_GUESSES) {
       setShowResult(true);
     }
+
+    initPostHog();
+    track('puzzle_viewed', {
+      puzzle_id: dailyPuzzle.id,
+      puzzle_difficulty: dailyPuzzle.difficulty,
+      puzzle_day: new Date().toISOString().split('T')[0],
+    });
   }, []);
 
   // Persist main state
@@ -76,10 +84,36 @@ export default function Game() {
     const nextState: GameState = { ...state, guesses: newGuesses, solved: correct, hintsUnlocked: newHintsUnlocked };
     setState(nextState);
 
+    track('guess_attempted', {
+      puzzle_id: puzzle.id,
+      attempt_number: newGuesses.length,
+      was_correct: correct,
+      hints_used_so_far: newHintsUnlocked,
+    });
+
     if (correct) {
+      track('puzzle_solved', {
+        puzzle_id: puzzle.id,
+        attempts: newGuesses.length,
+        hints_used: newHintsUnlocked,
+        difficulty: puzzle.difficulty,
+        solved_without_hints: newHintsUnlocked === 0,
+      });
       setTimeout(() => setShowResult(true), 500);
-    } else if (newGuesses.length >= MAX_GUESSES) {
-      setTimeout(() => setShowResult(true), 400);
+    } else {
+      // Fire hint_unlocked if a new hint became available
+      if (newHintsUnlocked > state.hintsUnlocked) {
+        const hintTypes = ['era', 'genre', 'initials', 'artist'];
+        track('hint_unlocked', {
+          puzzle_id: puzzle.id,
+          hint_number: newHintsUnlocked,
+          hint_type: hintTypes[newHintsUnlocked - 1],
+          attempts_at_time: newGuesses.length,
+        });
+      }
+      if (newGuesses.length >= MAX_GUESSES) {
+        setTimeout(() => setShowResult(true), 400);
+      }
     }
     setWrongGuessFlash(true);
     setTimeout(() => setWrongGuessFlash(false), 600);
@@ -87,9 +121,14 @@ export default function Game() {
 
   const handleGiveUp = useCallback(() => {
     if (!state || state.solved) return;
+    track('puzzle_given_up', {
+      puzzle_id: puzzle.id,
+      attempts: state.guesses.length,
+      hints_used: state.hintsUnlocked,
+    });
     setState({ ...state, revealed: true });
     setShowResult(true);
-  }, [state]);
+  }, [state, puzzle]);
 
   if (!state || !bonusState) {
     return (
@@ -232,6 +271,11 @@ export default function Game() {
             onStateChange={(next) => setBonusState(next)}
           />
         )}
+
+        {/* GDPR notice */}
+        <p className="text-center text-[10px] text-[var(--muted)] pt-4">
+          This site uses anonymous analytics to improve the game.
+        </p>
       </main>
 
       {/* ── Modals ─────────────────────────────────────────── */}
