@@ -11,6 +11,7 @@ interface ShareCardProps {
   dayIndex: number;
   formalTitle: string;
   puzzleId: number;
+  streak?: number;
 }
 
 export default function ShareCard({
@@ -20,10 +21,11 @@ export default function ShareCard({
   dayIndex,
   formalTitle,
   puzzleId,
+  streak,
 }: ShareCardProps) {
   const [copied, setCopied] = useState(false);
 
-  const text = buildShareText({ guesses, hintsUnlocked, solved, dayIndex, formalTitle });
+  const text = buildShareText({ guesses, hintsUnlocked, solved, dayIndex, formalTitle, streak });
 
   async function handleCopy() {
     if (copied) return; // debounce double-clicks

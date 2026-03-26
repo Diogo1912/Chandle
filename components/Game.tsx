@@ -6,12 +6,16 @@ import { getDailyPuzzle, getTodayString, getWeekString, getWeekBonusPuzzle, isCo
 import {
   loadState, saveState, freshState, type GameState,
   loadBonusState, saveBonusState, freshBonusState, type BonusState,
+  loadStats, recordGameResult, type PlayerStats,
 } from '@/lib/storage';
 import GuessInput from './GuessInput';
 import HintSystem from './HintSystem';
 import ResultModal from './ResultModal';
 import HowToModal from './HowToModal';
+import StatsModal from './StatsModal';
 import BonusSection from './BonusSection';
+import CountdownTimer from './CountdownTimer';
+import Link from 'next/link';
 import { initPostHog, track } from '@/lib/posthog';
 
 const MAX_GUESSES = 6;
@@ -21,6 +25,8 @@ export default function Game() {
   const [bonusState, setBonusState] = useState<BonusState | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [showHowTo, setShowHowTo] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const [stats, setStats] = useState<PlayerStats | null>(null);
   const [dayIndex, setDayIndex] = useState(0);
   const [puzzle, setPuzzle] = useState(puzzles[0]);
   const [bonusPuzzle, setBonusPuzzle] = useState(bonusPuzzles[0]);
@@ -48,6 +54,9 @@ export default function Game() {
 
     const storedBonus = loadBonusState(week);
     setBonusState(storedBonus ?? freshBonusState(week));
+
+    // Load persistent stats
+    setStats(loadStats());
 
     if (initial.solved || initial.revealed || initial.guesses.length >= MAX_GUESSES) {
       setShowResult(true);
@@ -99,6 +108,10 @@ export default function Game() {
         difficulty: puzzle.difficulty,
         solved_without_hints: newHintsUnlocked === 0,
       });
+      // Record stats
+      const today = getTodayString();
+      const updatedStats = recordGameResult(today, true, newGuesses.length);
+      setStats(updatedStats);
       setTimeout(() => setShowResult(true), 500);
     } else {
       // Fire hint_unlocked if a new hint became available
@@ -112,6 +125,10 @@ export default function Game() {
         });
       }
       if (newGuesses.length >= MAX_GUESSES) {
+        // Record stats — lost by running out of guesses
+        const today = getTodayString();
+        const updatedStats = recordGameResult(today, false, newGuesses.length);
+        setStats(updatedStats);
         setTimeout(() => setShowResult(true), 400);
       }
     }
@@ -127,6 +144,10 @@ export default function Game() {
       hints_used: state.hintsUnlocked,
     });
     setState({ ...state, revealed: true });
+    // Record stats — gave up
+    const today = getTodayString();
+    const updatedStats = recordGameResult(today, false, state.guesses.length);
+    setStats(updatedStats);
     setShowResult(true);
   }, [state, puzzle]);
 
@@ -167,13 +188,41 @@ export default function Game() {
             </span>
           )}
         </div>
-        <button
-          onClick={() => setShowHowTo(true)}
-          className="text-[var(--muted)] hover:text-[var(--ink)] transition-colors text-lg cursor-pointer"
-          aria-label="How to play"
-        >
-          ≡
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Streak badge */}
+          {stats && stats.currentStreak > 0 && (
+            <button
+              onClick={() => setShowStats(true)}
+              className="flex items-center gap-1 text-sm text-[var(--gold)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+              aria-label={`${stats.currentStreak} day streak. View stats.`}
+              title="View stats"
+            >
+              <span>&#128293;</span>
+              <span className="font-mono font-semibold text-xs">{stats.currentStreak}</span>
+            </button>
+          )}
+          {/* Stats button */}
+          <button
+            onClick={() => setShowStats(true)}
+            className="text-[var(--muted)] hover:text-[var(--ink)] transition-colors text-base cursor-pointer"
+            aria-label="Statistics"
+            title="Statistics"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <rect x="1" y="10" width="4" height="7" rx="0.5" />
+              <rect x="7" y="4" width="4" height="13" rx="0.5" />
+              <rect x="13" y="1" width="4" height="16" rx="0.5" />
+            </svg>
+          </button>
+          {/* How to play */}
+          <button
+            onClick={() => setShowHowTo(true)}
+            className="text-[var(--muted)] hover:text-[var(--ink)] transition-colors text-lg cursor-pointer"
+            aria-label="How to play"
+          >
+            &#8801;
+          </button>
+        </div>
       </header>
 
       {/* ── Main ───────────────────────────────────────────── */}
@@ -272,6 +321,21 @@ export default function Game() {
           />
         )}
 
+        {/* Countdown + archive link — shown after game ends */}
+        {isFinished && (
+          <div className="space-y-4 pt-2">
+            <CountdownTimer />
+            <div className="text-center">
+              <Link
+                href="/archive"
+                className="text-xs text-[var(--muted)] underline hover:text-[var(--ink)] transition-colors"
+              >
+                Play past puzzles &rarr;
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* GDPR notice */}
         <p className="text-center text-[10px] text-[var(--muted)] pt-4">
           This site uses anonymous analytics to improve the game.
@@ -284,11 +348,15 @@ export default function Game() {
           puzzle={puzzle}
           state={state}
           dayIndex={dayIndex}
+          streak={stats?.currentStreak}
           onClose={() => setShowResult(false)}
         />
       )}
       {showHowTo && (
         <HowToModal onClose={() => setShowHowTo(false)} />
+      )}
+      {showStats && stats && (
+        <StatsModal stats={stats} onClose={() => setShowStats(false)} />
       )}
     </>
   );

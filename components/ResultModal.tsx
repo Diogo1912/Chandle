@@ -4,11 +4,13 @@ import { useEffect } from 'react';
 import { type Puzzle } from '@/lib/puzzles';
 import { type GameState } from '@/lib/storage';
 import ShareCard from './ShareCard';
+import CountdownTimer from './CountdownTimer';
 
 interface ResultModalProps {
   puzzle: Puzzle;
   state: GameState;
   dayIndex: number;
+  streak?: number;
   onClose: () => void;
 }
 
@@ -16,6 +18,7 @@ export default function ResultModal({
   puzzle,
   state,
   dayIndex,
+  streak,
   onClose,
 }: ResultModalProps) {
   const { solved, revealed, guesses, hintsUnlocked } = state;
@@ -138,13 +141,12 @@ export default function ResultModal({
             dayIndex={dayIndex}
             formalTitle={puzzle.formal}
             puzzleId={puzzle.id}
+            streak={streak}
           />
         </div>
 
-        {/* Play tomorrow note */}
-        <p className="text-xs text-center text-[var(--muted)]">
-          A new puzzle arrives at midnight.
-        </p>
+        {/* Countdown to next puzzle */}
+        <CountdownTimer />
       </div>
     </div>
   );

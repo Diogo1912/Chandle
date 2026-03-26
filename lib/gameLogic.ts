@@ -137,8 +137,9 @@ export function buildShareText(params: {
   solved: boolean;
   dayIndex: number;
   formalTitle: string;
+  streak?: number;
 }): string {
-  const { guesses, hintsUnlocked, solved, dayIndex, formalTitle } = params;
+  const { guesses, hintsUnlocked, solved, dayIndex, formalTitle, streak } = params;
   const MAX_GUESSES = 6;
 
   const rows: string[] = [];
@@ -158,13 +159,55 @@ export function buildShareText(params: {
     ? `"${formalTitle.slice(0, 57)}..."`
     : `"${formalTitle}"`;
 
-  return [
+  const streakRow = streak && streak > 1 ? `🔥 ${streak} day streak` : '';
+
+  const lines = [
     `Chandle #${dayIndex + 1}`,
     truncated,
     '',
     rows.join(''),
     hintRow,
-    '',
-    'https://chandle.vercel.app',
-  ].join('\n');
+  ];
+
+  if (streakRow) lines.push(streakRow);
+
+  lines.push('', 'https://chandle.vercel.app');
+
+  return lines.join('\n');
+}
+
+/**
+ * Get past puzzles that were available between epoch and yesterday.
+ * Returns them in reverse chronological order (most recent first).
+ */
+export function getPastPuzzles(allPuzzles: Puzzle[]): {
+  puzzle: Puzzle;
+  dayIndex: number;
+  date: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+}[] {
+  const epoch = new Date(2026, 2, 17).getTime(); // local midnight Mar 17
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const totalDays = Math.floor((today - epoch) / 86_400_000);
+
+  const results: { puzzle: Puzzle; dayIndex: number; date: string; difficulty: 'easy' | 'medium' | 'hard' }[] = [];
+
+  // Go from yesterday back to day 0
+  for (let i = totalDays - 1; i >= 0; i--) {
+    const dayMs = epoch + i * 86_400_000;
+    const d = new Date(dayMs);
+    const difficulty = getDayDifficulty(d);
+    const pool = allPuzzles.filter(p => p.difficulty === difficulty);
+    const effectivePool = pool.length > 0 ? pool : allPuzzles;
+    const puzzle = effectivePool[((i % effectivePool.length) + effectivePool.length) % effectivePool.length];
+
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    results.push({ puzzle, dayIndex: i, date: `${y}-${m}-${day}`, difficulty });
+  }
+
+  return results;
 }
