@@ -15,6 +15,7 @@ import HowToModal from './HowToModal';
 import StatsModal from './StatsModal';
 import BonusSection from './BonusSection';
 import CountdownTimer from './CountdownTimer';
+import WhatsNewModal from './WhatsNewModal';
 import Link from 'next/link';
 import { initPostHog, track } from '@/lib/posthog';
 
@@ -33,6 +34,7 @@ export default function Game() {
   const [dayName, setDayName] = useState('');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [wrongGuessFlash, setWrongGuessFlash] = useState(false);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
 
   // Initialise on client only (localStorage)
   useEffect(() => {
@@ -68,6 +70,13 @@ export default function Game() {
       puzzle_difficulty: dailyPuzzle.difficulty,
       puzzle_day: new Date().toISOString().split('T')[0],
     });
+
+    // Show "What's New" popup once for v1.1
+    const WHATS_NEW_KEY = 'chandle-whats-new-v1.1';
+    if (!window.localStorage.getItem(WHATS_NEW_KEY)) {
+      setShowWhatsNew(true);
+      window.localStorage.setItem(WHATS_NEW_KEY, 'seen');
+    }
   }, []);
 
   // Persist main state
@@ -201,6 +210,21 @@ export default function Game() {
               <span className="font-mono font-semibold text-xs">{stats.currentStreak}</span>
             </button>
           )}
+          {/* Archive */}
+          <Link
+            href="/archive"
+            className="text-[var(--muted)] hover:text-[var(--ink)] transition-colors cursor-pointer"
+            aria-label="Past puzzles"
+            title="Past puzzles"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="14" height="14" rx="1.5" />
+              <line x1="2" y1="6.5" x2="16" y2="6.5" />
+              <line x1="6" y1="2" x2="6" y2="6.5" />
+              <line x1="12" y1="2" x2="12" y2="6.5" />
+              <circle cx="9" cy="11.5" r="1" fill="currentColor" stroke="none" />
+            </svg>
+          </Link>
           {/* Stats button */}
           <button
             onClick={() => setShowStats(true)}
@@ -321,18 +345,10 @@ export default function Game() {
           />
         )}
 
-        {/* Countdown + archive link — shown after game ends */}
+        {/* Countdown — shown after game ends */}
         {isFinished && (
-          <div className="space-y-4 pt-2">
+          <div className="pt-2">
             <CountdownTimer />
-            <div className="text-center">
-              <Link
-                href="/archive"
-                className="text-xs text-[var(--muted)] underline hover:text-[var(--ink)] transition-colors"
-              >
-                Play past puzzles &rarr;
-              </Link>
-            </div>
           </div>
         )}
 
@@ -357,6 +373,9 @@ export default function Game() {
       )}
       {showStats && stats && (
         <StatsModal stats={stats} onClose={() => setShowStats(false)} />
+      )}
+      {showWhatsNew && (
+        <WhatsNewModal onClose={() => setShowWhatsNew(false)} />
       )}
     </>
   );
