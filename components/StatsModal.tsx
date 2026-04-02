@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { type PlayerStats } from '@/lib/storage';
+import { BADGE_CATALOG, getNextBadge } from '@/lib/badges';
 
 interface StatsModalProps {
   stats: PlayerStats;
@@ -30,6 +31,9 @@ export default function StatsModal({ stats, onClose }: StatsModalProps) {
 
   const maxGuessCount = Math.max(...stats.guessDistribution, 1);
 
+  const earnedIds = new Set((stats.badges ?? []).map(b => b.id));
+  const nextBadge = getNextBadge(stats.currentStreak);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -40,7 +44,7 @@ export default function StatsModal({ stats, onClose }: StatsModalProps) {
       aria-label="Your statistics"
     >
       <div
-        className="relative w-full max-w-sm bg-[var(--bg)] border-2 border-[var(--ink)] p-8 space-y-6 animate-scale-in"
+        className="relative w-full max-w-sm bg-[var(--bg)] border-2 border-[var(--ink)] p-8 space-y-6 animate-scale-in max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -104,6 +108,41 @@ export default function StatsModal({ stats, onClose }: StatsModalProps) {
                 </div>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* Badges */}
+        <hr className="border-[var(--border)]" />
+        <div className="space-y-3">
+          <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">
+            Badges
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {BADGE_CATALOG.map((badge) => {
+              const earned = earnedIds.has(badge.id);
+              return (
+                <div
+                  key={badge.id}
+                  className={`
+                    flex items-center gap-1.5 px-3 py-1.5 text-xs
+                    border transition-colors
+                    ${earned
+                      ? 'border-[var(--gold)] text-[var(--ink)]'
+                      : 'border-[var(--border)] text-[var(--muted)] opacity-40'
+                    }
+                  `}
+                  title={earned ? `${badge.name} — ${badge.threshold} day streak` : `${badge.threshold} day streak required`}
+                >
+                  <span>{badge.emoji}</span>
+                  <span className="font-medium">{badge.name}</span>
+                </div>
+              );
+            })}
+          </div>
+          {nextBadge && stats.currentStreak > 0 && (
+            <p className="text-xs text-[var(--muted)]">
+              {nextBadge.threshold - stats.currentStreak} day{nextBadge.threshold - stats.currentStreak !== 1 ? 's' : ''} to <span className="font-medium">{nextBadge.name}</span>
+            </p>
           )}
         </div>
 

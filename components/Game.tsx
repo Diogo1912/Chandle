@@ -1,13 +1,21 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { puzzles, bonusPuzzles } from '@/lib/puzzles';
-import { getDailyPuzzle, getTodayString, getWeekString, getWeekBonusPuzzle, isCorrect } from '@/lib/gameLogic';
+import { puzzles, bonusPuzzles, moviePuzzles, bonusMoviePuzzles } from '@/lib/puzzles';
+import {
+  getDailyPuzzle, getDailyMoviePuzzle,
+  getTodayString, getWeekString,
+  getWeekBonusPuzzle, getWeekBonusMoviePuzzle,
+  isCorrect,
+} from '@/lib/gameLogic';
 import {
   loadState, saveState, freshState, type GameState,
+  loadMovieState, saveMovieState,
   loadBonusState, saveBonusState, freshBonusState, type BonusState,
+  loadMovieBonusState, saveMovieBonusState,
   loadStats, recordGameResult, type PlayerStats,
 } from '@/lib/storage';
+import { type EarnedBadge, getHighestBadge } from '@/lib/badges';
 import GuessInput from './GuessInput';
 import HintSystem from './HintSystem';
 import ResultModal from './ResultModal';
@@ -16,86 +24,144 @@ import StatsModal from './StatsModal';
 import BonusSection from './BonusSection';
 import CountdownTimer from './CountdownTimer';
 import WhatsNewModal from './WhatsNewModal';
+import ModeTabs from './ModeTabs';
+import WeeklyRecapModal from './WeeklyRecapModal';
+import InstallPrompt from './InstallPrompt';
 import Link from 'next/link';
 import { initPostHog, track } from '@/lib/posthog';
 
 const MAX_GUESSES = 6;
 
+type GameMode = 'song' | 'movie';
+
 export default function Game() {
-  const [state, setState] = useState<GameState | null>(null);
-  const [bonusState, setBonusState] = useState<BonusState | null>(null);
+  // ── Mode ────────────────────────────────────────────────
+  const [mode, setMode] = useState<GameMode>('song');
+
+  // ── Song state ──────────────────────────────────────────
+  const [songState, setSongState] = useState<GameState | null>(null);
+  const [songBonusState, setSongBonusState] = useState<BonusState | null>(null);
+  const [songPuzzle, setSongPuzzle] = useState(puzzles[0]);
+  const [songBonusPuzzle, setSongBonusPuzzle] = useState(bonusPuzzles[0]);
+
+  // ── Movie state ─────────────────────────────────────────
+  const [movieState, setMovieState] = useState<GameState | null>(null);
+  const [movieBonusState, setMovieBonusState] = useState<BonusState | null>(null);
+  const [moviePuzzle, setMoviePuzzle] = useState(moviePuzzles[0]);
+  const [movieBonusPuzzle, setMovieBonusPuzzle] = useState(bonusMoviePuzzles[0]);
+
+  // ── Shared state ────────────────────────────────────────
   const [showResult, setShowResult] = useState(false);
   const [showHowTo, setShowHowTo] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
+  const [showWeeklyRecap, setShowWeeklyRecap] = useState(false);
   const [stats, setStats] = useState<PlayerStats | null>(null);
   const [dayIndex, setDayIndex] = useState(0);
-  const [puzzle, setPuzzle] = useState(puzzles[0]);
-  const [bonusPuzzle, setBonusPuzzle] = useState(bonusPuzzles[0]);
   const [dayName, setDayName] = useState('');
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [wrongGuessFlash, setWrongGuessFlash] = useState(false);
-  const [showWhatsNew, setShowWhatsNew] = useState(false);
+  const [newBadges, setNewBadges] = useState<EarnedBadge[]>([]);
 
-  // Initialise on client only (localStorage)
+  // Derived: active puzzle and state based on mode
+  const state = mode === 'song' ? songState : movieState;
+  const setState = mode === 'song' ? setSongState : setMovieState;
+  const puzzle = mode === 'song' ? songPuzzle : moviePuzzle;
+  const bonusState = mode === 'song' ? songBonusState : movieBonusState;
+  const setBonusState = mode === 'song' ? setSongBonusState : setMovieBonusState;
+  const bonusPuzzleActive = mode === 'song' ? songBonusPuzzle : movieBonusPuzzle;
+
+  // ── Initialise on client ────────────────────────────────
   useEffect(() => {
     const today = getTodayString();
     const week = getWeekString();
 
-    const { puzzle: dailyPuzzle, dayIndex: idx, difficulty: diff, dayName: dName } = getDailyPuzzle(puzzles);
-    setPuzzle(dailyPuzzle);
+    // Song puzzle
+    const { puzzle: dailySong, dayIndex: idx, difficulty: diff, dayName: dName } = getDailyPuzzle(puzzles);
+    setSongPuzzle(dailySong);
     setDayIndex(idx);
     setDifficulty(diff);
     setDayName(dName);
+    setSongBonusPuzzle(getWeekBonusPuzzle(bonusPuzzles));
 
-    const weekBonus = getWeekBonusPuzzle(bonusPuzzles);
-    setBonusPuzzle(weekBonus);
+    const storedSong = loadState(today);
+    const initialSong = storedSong ?? freshState(today);
+    setSongState(initialSong);
+    setSongBonusState(loadBonusState(week) ?? freshBonusState(week));
 
-    const stored = loadState(today);
-    const initial = stored ?? freshState(today);
-    setState(initial);
+    // Movie puzzle
+    const { puzzle: dailyMovie } = getDailyMoviePuzzle(moviePuzzles);
+    setMoviePuzzle(dailyMovie);
+    setMovieBonusPuzzle(getWeekBonusMoviePuzzle(bonusMoviePuzzles));
 
-    const storedBonus = loadBonusState(week);
-    setBonusState(storedBonus ?? freshBonusState(week));
+    const storedMovie = loadMovieState(today);
+    const initialMovie = storedMovie ?? freshState(today);
+    setMovieState(initialMovie);
+    setMovieBonusState(loadMovieBonusState(week) ?? freshBonusState(week));
 
-    // Load persistent stats
+    // Stats
     setStats(loadStats());
 
-    if (initial.solved || initial.revealed || initial.guesses.length >= MAX_GUESSES) {
+    // Auto-open result if song puzzle is already finished
+    if (initialSong.solved || initialSong.revealed || initialSong.guesses.length >= MAX_GUESSES) {
       setShowResult(true);
     }
 
     initPostHog();
     track('puzzle_viewed', {
-      puzzle_id: dailyPuzzle.id,
-      puzzle_difficulty: dailyPuzzle.difficulty,
+      puzzle_id: dailySong.id,
+      puzzle_difficulty: dailySong.difficulty,
       puzzle_day: new Date().toISOString().split('T')[0],
     });
 
-    // Show "What's New" popup once for v1.1
-    const WHATS_NEW_KEY = 'chandle-whats-new-v1.1';
+    // Show "What's New" popup once for v1.2
+    const WHATS_NEW_KEY = 'chandle-whats-new-v1.2';
     if (!window.localStorage.getItem(WHATS_NEW_KEY)) {
       setShowWhatsNew(true);
       window.localStorage.setItem(WHATS_NEW_KEY, 'seen');
     }
   }, []);
 
-  // Persist main state
+  // ── Persist state ───────────────────────────────────────
   useEffect(() => {
-    if (state) saveState(state);
-  }, [state]);
+    if (songState) saveState(songState);
+  }, [songState]);
 
-  // Persist bonus state
   useEffect(() => {
-    if (bonusState) saveBonusState(bonusState);
-  }, [bonusState]);
+    if (movieState) saveMovieState(movieState);
+  }, [movieState]);
 
+  useEffect(() => {
+    if (songBonusState) saveBonusState(songBonusState);
+  }, [songBonusState]);
+
+  useEffect(() => {
+    if (movieBonusState) saveMovieBonusState(movieBonusState);
+  }, [movieBonusState]);
+
+  // ── Mode switching ──────────────────────────────────────
+  const handleModeChange = useCallback((newMode: GameMode) => {
+    if (newMode === mode) return;
+    setMode(newMode);
+    setShowResult(false);
+    setWrongGuessFlash(false);
+
+    track('mode_switched', { from: mode, to: newMode });
+
+    // If the new mode's puzzle is already finished, show result
+    const targetState = newMode === 'song' ? songState : movieState;
+    if (targetState && (targetState.solved || targetState.revealed || targetState.guesses.length >= MAX_GUESSES)) {
+      setTimeout(() => setShowResult(true), 100);
+    }
+  }, [mode, songState, movieState]);
+
+  // ── Guess handler ───────────────────────────────────────
   const handleGuess = useCallback((guess: string) => {
     if (!state) return;
     if (state.solved || state.revealed || state.guesses.length >= MAX_GUESSES) return;
 
     const correct = isCorrect(guess, puzzle);
     const newGuesses = [...state.guesses, guess];
-    // Auto-unlock one hint per wrong guess (up to 4), so all hints are visible by guess 5+
     const newHintsUnlocked = correct
       ? state.hintsUnlocked
       : Math.min(newGuesses.length, 4);
@@ -104,6 +170,7 @@ export default function Game() {
 
     track('guess_attempted', {
       puzzle_id: puzzle.id,
+      mode,
       attempt_number: newGuesses.length,
       was_correct: correct,
       hints_used_so_far: newHintsUnlocked,
@@ -112,20 +179,20 @@ export default function Game() {
     if (correct) {
       track('puzzle_solved', {
         puzzle_id: puzzle.id,
+        mode,
         attempts: newGuesses.length,
         hints_used: newHintsUnlocked,
         difficulty: puzzle.difficulty,
         solved_without_hints: newHintsUnlocked === 0,
       });
-      // Record stats
       const today = getTodayString();
-      const updatedStats = recordGameResult(today, true, newGuesses.length);
+      const { stats: updatedStats, newBadges: earned } = recordGameResult(today, true, newGuesses.length, newHintsUnlocked, puzzle.id);
       setStats(updatedStats);
+      if (earned.length > 0) setNewBadges(earned);
       setTimeout(() => setShowResult(true), 500);
     } else {
-      // Fire hint_unlocked if a new hint became available
       if (newHintsUnlocked > state.hintsUnlocked) {
-        const hintTypes = ['era', 'genre', 'initials', 'artist'];
+        const hintTypes = ['era', 'genre', 'initials', mode === 'movie' ? 'director' : 'artist'];
         track('hint_unlocked', {
           puzzle_id: puzzle.id,
           hint_number: newHintsUnlocked,
@@ -134,33 +201,45 @@ export default function Game() {
         });
       }
       if (newGuesses.length >= MAX_GUESSES) {
-        // Record stats — lost by running out of guesses
         const today = getTodayString();
-        const updatedStats = recordGameResult(today, false, newGuesses.length);
+        const { stats: updatedStats, newBadges: earned } = recordGameResult(today, false, newGuesses.length, newHintsUnlocked, puzzle.id);
         setStats(updatedStats);
+        if (earned.length > 0) setNewBadges(earned);
         setTimeout(() => setShowResult(true), 400);
       }
     }
     setWrongGuessFlash(true);
     setTimeout(() => setWrongGuessFlash(false), 600);
-  }, [state, puzzle]);
+  }, [state, puzzle, mode, setState]);
 
+  // ── Give up handler ─────────────────────────────────────
   const handleGiveUp = useCallback(() => {
     if (!state || state.solved) return;
     track('puzzle_given_up', {
       puzzle_id: puzzle.id,
+      mode,
       attempts: state.guesses.length,
       hints_used: state.hintsUnlocked,
     });
     setState({ ...state, revealed: true });
-    // Record stats — gave up
     const today = getTodayString();
-    const updatedStats = recordGameResult(today, false, state.guesses.length);
+    const { stats: updatedStats, newBadges: earned } = recordGameResult(today, false, state.guesses.length, state.hintsUnlocked, puzzle.id);
     setStats(updatedStats);
+    if (earned.length > 0) setNewBadges(earned);
     setShowResult(true);
-  }, [state, puzzle]);
+  }, [state, puzzle, mode, setState]);
 
-  if (!state || !bonusState) {
+  // ── Handle result modal close — trigger weekly recap on Sunday ──
+  const handleResultClose = useCallback(() => {
+    setShowResult(false);
+    const isSunday = new Date().getDay() === 0;
+    if (isSunday && !showWeeklyRecap) {
+      setTimeout(() => setShowWeeklyRecap(true), 300);
+    }
+  }, [showWeeklyRecap]);
+
+  // ── Loading state ───────────────────────────────────────
+  if (!songState || !movieState || !songBonusState || !movieBonusState) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <span className="text-[var(--muted)] text-sm tracking-wide">Loading…</span>
@@ -168,16 +247,22 @@ export default function Game() {
     );
   }
 
-  const isFinished = state.solved || state.revealed || state.guesses.length >= MAX_GUESSES;
-  const wrongGuesses = state.guesses.filter((_, i) =>
-    !(i === state.guesses.length - 1 && state.solved)
+  const isFinished = state!.solved || state!.revealed || state!.guesses.length >= MAX_GUESSES;
+  const wrongGuesses = state!.guesses.filter((_, i) =>
+    !(i === state!.guesses.length - 1 && state!.solved)
   );
+
+  const songFinished = songState.solved || songState.revealed || songState.guesses.length >= MAX_GUESSES;
+  const movieFinished = movieState.solved || movieState.revealed || movieState.guesses.length >= MAX_GUESSES;
 
   const difficultyColor = {
     easy:   'text-[var(--green)] border-[var(--green)]',
     medium: 'text-[var(--gold)]  border-[var(--gold)]',
     hard:   'text-[var(--red)]   border-[var(--red)]',
   }[difficulty];
+
+  const modeLabel = mode === 'movie' ? 'movie' : 'song';
+  const highestBadge = stats ? getHighestBadge(stats.badges) : null;
 
   return (
     <>
@@ -249,13 +334,21 @@ export default function Game() {
         </div>
       </header>
 
+      {/* ── Mode Tabs ──────────────────────────────────────── */}
+      <ModeTabs
+        mode={mode}
+        onModeChange={handleModeChange}
+        songFinished={songFinished}
+        movieFinished={movieFinished}
+      />
+
       {/* ── Main ───────────────────────────────────────────── */}
       <main className="max-w-xl mx-auto px-5 py-10 space-y-10">
 
         {/* Formal title — hero element */}
-        <section aria-label="Today's formal title">
+        <section aria-label={`Today's formal ${modeLabel} title`}>
           <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted)] mb-4">
-            Identify this song
+            Identify this {modeLabel}
           </p>
           <blockquote
             className="text-2xl sm:text-3xl leading-snug font-medium italic text-center text-[var(--ink)] px-2"
@@ -288,7 +381,7 @@ export default function Game() {
             <div className={`transition-all duration-150 ${wrongGuessFlash ? 'opacity-50' : 'opacity-100'}`}>
               <GuessInput onSubmit={handleGuess} disabled={isFinished} />
               <p className="text-xs text-[var(--muted)] mt-3">
-                {MAX_GUESSES - state.guesses.length} attempt{MAX_GUESSES - state.guesses.length !== 1 ? 's' : ''} remaining
+                {MAX_GUESSES - state!.guesses.length} attempt{MAX_GUESSES - state!.guesses.length !== 1 ? 's' : ''} remaining
               </p>
             </div>
           </section>
@@ -317,10 +410,10 @@ export default function Game() {
         <section className="pt-2 border-t border-[var(--border)]" aria-label="Hints">
           <HintSystem
             puzzle={puzzle}
-            hintsUnlocked={state.hintsUnlocked}
-            guessCount={state.guesses.length}
-            solved={state.solved}
-            revealed={state.revealed}
+            hintsUnlocked={state!.hintsUnlocked}
+            guessCount={state!.guesses.length}
+            solved={state!.solved}
+            revealed={state!.revealed}
           />
         </section>
 
@@ -339,8 +432,8 @@ export default function Game() {
         {/* ── Bonus puzzle — only after game ends ── */}
         {isFinished && (
           <BonusSection
-            puzzle={bonusPuzzle}
-            state={bonusState}
+            puzzle={bonusPuzzleActive}
+            state={bonusState!}
             onStateChange={(next) => setBonusState(next)}
           />
         )}
@@ -352,6 +445,9 @@ export default function Game() {
           </div>
         )}
 
+        {/* Install prompt — shown after game ends */}
+        {isFinished && <InstallPrompt />}
+
         {/* GDPR notice */}
         <p className="text-center text-[10px] text-[var(--muted)] pt-4">
           This site uses anonymous analytics to improve the game.
@@ -359,13 +455,16 @@ export default function Game() {
       </main>
 
       {/* ── Modals ─────────────────────────────────────────── */}
-      {showResult && (
+      {showResult && state && (
         <ResultModal
           puzzle={puzzle}
           state={state}
           dayIndex={dayIndex}
           streak={stats?.currentStreak}
-          onClose={() => setShowResult(false)}
+          mode={mode}
+          newBadges={newBadges}
+          highestBadge={highestBadge}
+          onClose={handleResultClose}
         />
       )}
       {showHowTo && (
@@ -376,6 +475,12 @@ export default function Game() {
       )}
       {showWhatsNew && (
         <WhatsNewModal onClose={() => setShowWhatsNew(false)} />
+      )}
+      {showWeeklyRecap && stats && (
+        <WeeklyRecapModal
+          currentStreak={stats.currentStreak}
+          onClose={() => setShowWeeklyRecap(false)}
+        />
       )}
     </>
   );

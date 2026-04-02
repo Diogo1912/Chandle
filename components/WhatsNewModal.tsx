@@ -48,7 +48,7 @@ export default function WhatsNewModal({ onClose }: WhatsNewModalProps) {
           <span
             className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border-2 border-[var(--gold)] text-[var(--gold)]"
           >
-            v1.1
+            v1.2
           </span>
           <h2
             className="text-lg font-semibold"
@@ -60,38 +60,45 @@ export default function WhatsNewModal({ onClose }: WhatsNewModalProps) {
 
         <ul className="space-y-4 text-sm text-[var(--ink)]">
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128293;</span>
+            <span className="text-base shrink-0">&#127916;</span>
             <span>
-              <strong className="text-[var(--ink)]">Streaks</strong>
-              <span className="text-[var(--muted)]"> &mdash; Play every day to build your streak. Miss a day and it resets.</span>
+              <strong className="text-[var(--ink)]">Movie Mode</strong>
+              <span className="text-[var(--muted)]"> &mdash; Two daily puzzles: songs AND movies. Switch between them with the new tabs.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128202;</span>
+            <span className="text-base shrink-0">&#127942;</span>
             <span>
-              <strong className="text-[var(--ink)]">Statistics</strong>
-              <span className="text-[var(--muted)]"> &mdash; Track your win rate, best streak, and guess distribution.</span>
+              <strong className="text-[var(--ink)]">Badges</strong>
+              <span className="text-[var(--muted)]"> &mdash; Earn streak badges at 3, 7, 14, 30, 60, and 100 days. Check your stats to see them.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128230;</span>
+            <span className="text-base shrink-0">&#127911;</span>
             <span>
-              <strong className="text-[var(--ink)]">Archive</strong>
-              <span className="text-[var(--muted)]"> &mdash; Missed a day? Go back and play any past puzzle.</span>
+              <strong className="text-[var(--ink)]">Listen</strong>
+              <span className="text-[var(--muted)]"> &mdash; YouTube, Spotify, and IMDb links after you solve (or give up).</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#9203;</span>
+            <span className="text-base shrink-0">&#129309;</span>
             <span>
-              <strong className="text-[var(--ink)]">Countdown</strong>
-              <span className="text-[var(--muted)]"> &mdash; See exactly when the next puzzle drops.</span>
+              <strong className="text-[var(--ink)]">Challenge a Friend</strong>
+              <span className="text-[var(--muted)]"> &mdash; Send any puzzle directly to a friend with a shareable link.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128279;</span>
+            <span className="text-base shrink-0">&#128197;</span>
             <span>
-              <strong className="text-[var(--ink)]">Better sharing</strong>
-              <span className="text-[var(--muted)]"> &mdash; Share card now shows your streak.</span>
+              <strong className="text-[var(--ink)]">Weekly Recap</strong>
+              <span className="text-[var(--muted)]"> &mdash; See your week in review every Sunday. Shareable summary card.</span>
+            </span>
+          </li>
+          <li className="flex gap-3">
+            <span className="text-base shrink-0">&#128241;</span>
+            <span>
+              <strong className="text-[var(--ink)]">Installable</strong>
+              <span className="text-[var(--muted)]"> &mdash; Add Chandle to your home screen for instant access.</span>
             </span>
           </li>
         </ul>

@@ -1,9 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { type Puzzle } from '@/lib/puzzles';
 import { type GameState } from '@/lib/storage';
+import { type EarnedBadge } from '@/lib/badges';
+import { buildChallengeUrl } from '@/lib/gameLogic';
+import { track } from '@/lib/posthog';
 import ShareCard from './ShareCard';
+import SongLinks from './SongLinks';
 import CountdownTimer from './CountdownTimer';
 
 interface ResultModalProps {
@@ -11,6 +15,9 @@ interface ResultModalProps {
   state: GameState;
   dayIndex: number;
   streak?: number;
+  mode?: 'song' | 'movie';
+  newBadges?: EarnedBadge[];
+  highestBadge?: EarnedBadge | null;
   onClose: () => void;
 }
 
@@ -19,9 +26,13 @@ export default function ResultModal({
   state,
   dayIndex,
   streak,
+  mode,
+  newBadges,
+  highestBadge,
   onClose,
 }: ResultModalProps) {
   const { solved, revealed, guesses, hintsUnlocked } = state;
+  const [challengeCopied, setChallengeCopied] = useState(false);
 
   // Close on Escape
   useEffect(() => {
@@ -41,6 +52,26 @@ export default function ResultModal({
   const isWin = solved;
   const isLoseOrGiveUp = !solved && (revealed || guesses.length >= 6);
 
+  async function handleChallenge() {
+    const url = buildChallengeUrl(puzzle.id);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Can you guess this one?', text: 'Try this Chandle puzzle!', url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        setChallengeCopied(true);
+        setTimeout(() => setChallengeCopied(false), 2500);
+      }
+    } catch {
+      try {
+        await navigator.clipboard.writeText(url);
+        setChallengeCopied(true);
+        setTimeout(() => setChallengeCopied(false), 2500);
+      } catch { /* ignore */ }
+    }
+    track('challenge_created', { puzzle_id: puzzle.id });
+  }
+
   return (
     /* Backdrop */
     <div
@@ -59,6 +90,7 @@ export default function ResultModal({
           border-2 border-[var(--ink)]
           p-8 space-y-6
           animate-scale-in
+          max-h-[90vh] overflow-y-auto
         "
         onClick={(e) => e.stopPropagation()}
       >
@@ -101,6 +133,12 @@ export default function ResultModal({
                 : `Solved in ${guesses.length} ${guesses.length === 1 ? 'guess' : 'guesses'}.`}
               {hintsUnlocked > 0 && ` ${hintsUnlocked} hint${hintsUnlocked > 1 ? 's' : ''} used.`}
             </p>
+            <SongLinks
+              puzzleId={puzzle.id}
+              youtubeId={puzzle.youtubeId}
+              spotifyId={puzzle.spotifyId}
+              imdbId={puzzle.imdbId}
+            />
           </div>
         )}
 
@@ -123,7 +161,33 @@ export default function ResultModal({
               <span>·</span>
               <span>{puzzle.genre}</span>
             </div>
+            <SongLinks
+              puzzleId={puzzle.id}
+              youtubeId={puzzle.youtubeId}
+              spotifyId={puzzle.spotifyId}
+              imdbId={puzzle.imdbId}
+            />
           </div>
+        )}
+
+        {/* New badge celebration */}
+        {newBadges && newBadges.length > 0 && (
+          <>
+            <hr className="border-[var(--border)]" />
+            <div className="text-center space-y-1 py-2">
+              <p className="text-xs font-medium uppercase tracking-widest text-[var(--gold)]">
+                New badge earned!
+              </p>
+              {newBadges.map((badge) => (
+                <p key={badge.id} className="text-lg">
+                  <span className="mr-2">{badge.emoji}</span>
+                  <span className="font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>
+                    {badge.name}
+                  </span>
+                </p>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Divider */}
@@ -142,8 +206,26 @@ export default function ResultModal({
             formalTitle={puzzle.formal}
             puzzleId={puzzle.id}
             streak={streak}
+            mode={mode}
+            badgeEmoji={highestBadge?.emoji}
+            badgeName={highestBadge?.name}
           />
         </div>
+
+        {/* Challenge a friend */}
+        <button
+          onClick={handleChallenge}
+          className="
+            w-full py-2.5
+            text-sm font-medium tracking-wide uppercase
+            border-2 border-[var(--ink)] text-[var(--ink)]
+            hover:bg-[var(--ink)] hover:text-[var(--bg)]
+            transition-colors duration-150
+            cursor-pointer
+          "
+        >
+          {challengeCopied ? 'Link copied!' : 'Challenge a friend'}
+        </button>
 
         {/* Countdown to next puzzle */}
         <CountdownTimer />

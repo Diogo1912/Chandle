@@ -12,6 +12,9 @@ interface ShareCardProps {
   formalTitle: string;
   puzzleId: number;
   streak?: number;
+  mode?: 'song' | 'movie';
+  badgeEmoji?: string;
+  badgeName?: string;
 }
 
 export default function ShareCard({
@@ -22,10 +25,13 @@ export default function ShareCard({
   formalTitle,
   puzzleId,
   streak,
+  mode,
+  badgeEmoji,
+  badgeName,
 }: ShareCardProps) {
   const [copied, setCopied] = useState(false);
 
-  const text = buildShareText({ guesses, hintsUnlocked, solved, dayIndex, formalTitle, streak });
+  const text = buildShareText({ guesses, hintsUnlocked, solved, dayIndex, formalTitle, streak, mode, badgeEmoji, badgeName });
 
   async function handleCopy() {
     if (copied) return; // debounce double-clicks

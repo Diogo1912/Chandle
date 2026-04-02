@@ -21,13 +21,14 @@ function getInitials(answer: string): string {
     .join(' ');
 }
 
-// Hints revealed in this order: era → genre → initials → artist
+// Hints revealed in this order: era → genre → initials → artist/director
 function getHints(puzzle: Puzzle): { label: string; value: string }[] {
+  const creatorLabel = puzzle.type === 'movie' ? 'Director' : 'Artist';
   return [
     { label: 'Era',      value: puzzle.era },
     { label: 'Genre',    value: puzzle.genre },
     { label: 'Initials', value: getInitials(puzzle.answer) },
-    { label: 'Artist',   value: puzzle.artist },
+    { label: creatorLabel, value: puzzle.artist },
   ];
 }
 
