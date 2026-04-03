@@ -70,9 +70,8 @@ export function SmartphoneIcon({ size = 16, className }: IconProps) {
 
 export function FireIcon({ size = 16, className }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
-      <path d="M12 2c.5 4-2.5 6-2.5 10a4.5 4.5 0 009 0c0-4-3-4.5-3-8.5C15 2.5 12 2 12 2z" />
-      <path d="M12 18a2 2 0 01-2-2c0-1.5 2-2.5 2-5 0 2.5 2 3.5 2 5a2 2 0 01-2 2z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M12 23c-4.97 0-8-3.03-8-7.5 0-3.82 2.77-7.3 4.4-9.22.37-.44 1.06-.2 1.08.37.1 2.09.76 3.72 2.52 4.6.02-2.8 1.37-6.1 3.6-8.98.3-.39.88-.24.97.24.56 2.93 2.43 5.4 2.43 8.49 0 1.57-.47 3.01-1.27 4.2.2-.12.37-.28.52-.46.29-.35.82-.27.95.16.26.85.3 1.76.3 2.1 0 3.37-2.41 6-7.5 6z" />
     </svg>
   );
 }
