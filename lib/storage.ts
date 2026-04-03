@@ -7,7 +7,7 @@ const ARCHIVE_KEY       = 'chandle-archive';
 const MOVIE_STATE_KEY   = 'chandle-movie-state';
 const MOVIE_BONUS_KEY   = 'chandle-movie-bonus';
 const HISTORY_KEY       = 'chandle-history';
-const CHALLENGE_KEY     = 'chandle-challenges';
+// (challenge feature removed)
 
 export interface GameState {
   guesses: string[];
@@ -247,36 +247,6 @@ export function saveArchiveEntry(entry: ArchiveEntry): void {
     const archive = loadArchive();
     archive[entry.puzzleId] = entry;
     window.localStorage.setItem(ARCHIVE_KEY, JSON.stringify(archive));
-  } catch { /* quota */ }
-}
-
-// ─── Challenge state ──────────────────────────────────────────────────────────
-
-export interface ChallengeEntry {
-  puzzleId: number;
-  guesses: string[];
-  hintsUnlocked: number;
-  solved: boolean;
-  revealed: boolean;
-}
-
-export function loadChallenges(): Record<number, ChallengeEntry> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const raw = window.localStorage.getItem(CHALLENGE_KEY);
-    if (!raw) return {};
-    return JSON.parse(raw) as Record<number, ChallengeEntry>;
-  } catch {
-    return {};
-  }
-}
-
-export function saveChallengeEntry(entry: ChallengeEntry): void {
-  if (typeof window === 'undefined') return;
-  try {
-    const challenges = loadChallenges();
-    challenges[entry.puzzleId] = entry;
-    window.localStorage.setItem(CHALLENGE_KEY, JSON.stringify(challenges));
   } catch { /* quota */ }
 }
 

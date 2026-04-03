@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { MovieClapperIcon, TrophyIcon, HeadphonesIcon, CalendarIcon, SmartphoneIcon } from './Icons';
 
 interface WhatsNewModalProps {
   onClose: () => void;
@@ -60,42 +61,35 @@ export default function WhatsNewModal({ onClose }: WhatsNewModalProps) {
 
         <ul className="space-y-4 text-sm text-[var(--ink)]">
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#127916;</span>
+            <span className="shrink-0 text-[var(--ink)]"><MovieClapperIcon size={18} /></span>
             <span>
               <strong className="text-[var(--ink)]">Movie Mode</strong>
               <span className="text-[var(--muted)]"> &mdash; Two daily puzzles: songs AND movies. Switch between them with the new tabs.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#127942;</span>
+            <span className="shrink-0 text-[var(--ink)]"><TrophyIcon size={18} /></span>
             <span>
               <strong className="text-[var(--ink)]">Badges</strong>
               <span className="text-[var(--muted)]"> &mdash; Earn streak badges at 3, 7, 14, 30, 60, and 100 days. Check your stats to see them.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#127911;</span>
+            <span className="shrink-0 text-[var(--ink)]"><HeadphonesIcon size={18} /></span>
             <span>
               <strong className="text-[var(--ink)]">Listen</strong>
               <span className="text-[var(--muted)]"> &mdash; YouTube, Spotify, and IMDb links after you solve (or give up).</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#129309;</span>
-            <span>
-              <strong className="text-[var(--ink)]">Challenge a Friend</strong>
-              <span className="text-[var(--muted)]"> &mdash; Send any puzzle directly to a friend with a shareable link.</span>
-            </span>
-          </li>
-          <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128197;</span>
+            <span className="shrink-0 text-[var(--ink)]"><CalendarIcon size={18} /></span>
             <span>
               <strong className="text-[var(--ink)]">Weekly Recap</strong>
               <span className="text-[var(--muted)]"> &mdash; See your week in review every Sunday. Shareable summary card.</span>
             </span>
           </li>
           <li className="flex gap-3">
-            <span className="text-base shrink-0">&#128241;</span>
+            <span className="shrink-0 text-[var(--ink)]"><SmartphoneIcon size={18} /></span>
             <span>
               <strong className="text-[var(--ink)]">Installable</strong>
               <span className="text-[var(--muted)]"> &mdash; Add Chandle to your home screen for instant access.</span>

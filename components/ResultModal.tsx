@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { type Puzzle } from '@/lib/puzzles';
 import { type GameState } from '@/lib/storage';
 import { type EarnedBadge } from '@/lib/badges';
-import { buildChallengeUrl } from '@/lib/gameLogic';
-import { track } from '@/lib/posthog';
 import ShareCard from './ShareCard';
 import SongLinks from './SongLinks';
 import CountdownTimer from './CountdownTimer';
+import { BADGE_ICONS } from './Icons';
 
 interface ResultModalProps {
   puzzle: Puzzle;
@@ -32,8 +31,6 @@ export default function ResultModal({
   onClose,
 }: ResultModalProps) {
   const { solved, revealed, guesses, hintsUnlocked } = state;
-  const [challengeCopied, setChallengeCopied] = useState(false);
-
   // Close on Escape
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -51,26 +48,6 @@ export default function ResultModal({
 
   const isWin = solved;
   const isLoseOrGiveUp = !solved && (revealed || guesses.length >= 6);
-
-  async function handleChallenge() {
-    const url = buildChallengeUrl(puzzle.id);
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: 'Can you guess this one?', text: 'Try this Chandle puzzle!', url });
-      } else {
-        await navigator.clipboard.writeText(url);
-        setChallengeCopied(true);
-        setTimeout(() => setChallengeCopied(false), 2500);
-      }
-    } catch {
-      try {
-        await navigator.clipboard.writeText(url);
-        setChallengeCopied(true);
-        setTimeout(() => setChallengeCopied(false), 2500);
-      } catch { /* ignore */ }
-    }
-    track('challenge_created', { puzzle_id: puzzle.id });
-  }
 
   return (
     /* Backdrop */
@@ -180,7 +157,7 @@ export default function ResultModal({
               </p>
               {newBadges.map((badge) => (
                 <p key={badge.id} className="text-lg">
-                  <span className="mr-2">{badge.emoji}</span>
+                  <span className="mr-2 inline-flex">{BADGE_ICONS[badge.id] ? BADGE_ICONS[badge.id]({ size: 20 }) : badge.emoji}</span>
                   <span className="font-semibold" style={{ fontFamily: 'var(--font-playfair)' }}>
                     {badge.name}
                   </span>
@@ -211,21 +188,6 @@ export default function ResultModal({
             badgeName={highestBadge?.name}
           />
         </div>
-
-        {/* Challenge a friend */}
-        <button
-          onClick={handleChallenge}
-          className="
-            w-full py-2.5
-            text-sm font-medium tracking-wide uppercase
-            border-2 border-[var(--ink)] text-[var(--ink)]
-            hover:bg-[var(--ink)] hover:text-[var(--bg)]
-            transition-colors duration-150
-            cursor-pointer
-          "
-        >
-          {challengeCopied ? 'Link copied!' : 'Challenge a friend'}
-        </button>
 
         {/* Countdown to next puzzle */}
         <CountdownTimer />

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { type Puzzle } from '@/lib/puzzles';
 import { type BonusState } from '@/lib/storage';
 import { isCorrect } from '@/lib/gameLogic';
+import { StarIcon, CameraIcon } from './Icons';
 
 interface BonusSectionProps {
   puzzle: Puzzle;
@@ -75,7 +76,7 @@ export default function BonusSection({ puzzle, state, onStateChange }: BonusSect
 
       {/* ── Header ── */}
       <div className="flex items-center gap-3 flex-wrap">
-        <span className="text-[var(--red)] text-base leading-none">★</span>
+        <span className="text-[var(--red)] leading-none"><StarIcon size={16} /></span>
         <span className="text-xs font-medium uppercase tracking-widest">Bonus Puzzle</span>
         <span className="text-xs px-2 py-0.5 border border-[var(--red)] text-[var(--red)] uppercase tracking-wider font-medium">
           Extra Hard
@@ -105,7 +106,7 @@ export default function BonusSection({ puzzle, state, onStateChange }: BonusSect
               transition-colors duration-150 cursor-pointer
             "
           >
-            {sharing ? 'Opening share…' : '📸  Share to Instagram Story'}
+            {sharing ? 'Opening share\u2026' : <><CameraIcon size={16} className="inline -mt-0.5 mr-1.5" />Share to Instagram Story</>}
           </button>
         </div>
       )}

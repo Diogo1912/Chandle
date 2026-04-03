@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { SquareGreenIcon, SquareRedIcon, LightbulbIcon, SquareEmptyIcon } from './Icons';
 
 interface HowToModalProps {
   onClose: () => void;
@@ -94,11 +95,11 @@ export default function HowToModal({ onClose }: HowToModalProps) {
 
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase tracking-widest text-[var(--muted)]">Share key</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-[var(--ink)]">
-            <span>🟩 Correct</span>
-            <span>🟥 Wrong guess</span>
-            <span>💡 Hint used</span>
-            <span>⬜ Unused slot</span>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[var(--ink)]">
+            <span className="inline-flex items-center gap-1.5"><SquareGreenIcon /> Correct</span>
+            <span className="inline-flex items-center gap-1.5"><SquareRedIcon /> Wrong guess</span>
+            <span className="inline-flex items-center gap-1.5"><LightbulbIcon size={14} className="text-[var(--gold)]" /> Hint used</span>
+            <span className="inline-flex items-center gap-1.5"><SquareEmptyIcon /> Unused slot</span>
           </div>
         </div>
 

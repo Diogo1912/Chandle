@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { loadHistory } from '@/lib/storage';
 import { buildWeeklyRecap, buildWeeklyShareText, type WeeklyRecap } from '@/lib/gameLogic';
 import { track } from '@/lib/posthog';
+import { FireIcon } from './Icons';
 
 interface WeeklyRecapModalProps {
   currentStreak: number;
@@ -130,7 +131,7 @@ export default function WeeklyRecapModal({ currentStreak, onClose }: WeeklyRecap
 
         {currentStreak > 1 && (
           <p className="text-sm text-center text-[var(--muted)]">
-            &#128293; {currentStreak} day streak
+            <FireIcon size={16} className="inline -mt-0.5 mr-1" />{currentStreak} day streak
           </p>
         )}
 

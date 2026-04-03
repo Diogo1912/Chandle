@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { type PlayerStats } from '@/lib/storage';
 import { BADGE_CATALOG, getNextBadge } from '@/lib/badges';
+import { BADGE_ICONS } from './Icons';
 
 interface StatsModalProps {
   stats: PlayerStats;
@@ -133,7 +134,7 @@ export default function StatsModal({ stats, onClose }: StatsModalProps) {
                   `}
                   title={earned ? `${badge.name} — ${badge.threshold} day streak` : `${badge.threshold} day streak required`}
                 >
-                  <span>{badge.emoji}</span>
+                  <span>{BADGE_ICONS[badge.id] ? BADGE_ICONS[badge.id]({ size: 16 }) : badge.emoji}</span>
                   <span className="font-medium">{badge.name}</span>
                 </div>
               );

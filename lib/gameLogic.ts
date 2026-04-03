@@ -183,11 +183,6 @@ export function buildShareText(params: {
   return lines.join('\n');
 }
 
-/** Build a challenge URL for a specific puzzle. */
-export function buildChallengeUrl(puzzleId: number): string {
-  return `https://chandle.vercel.app/challenge/${puzzleId}`;
-}
-
 /**
  * Returns today's movie puzzle. Same logic as getDailyPuzzle but for movie pool.
  */

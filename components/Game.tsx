@@ -27,6 +27,7 @@ import WhatsNewModal from './WhatsNewModal';
 import ModeTabs from './ModeTabs';
 import WeeklyRecapModal from './WeeklyRecapModal';
 import InstallPrompt from './InstallPrompt';
+import { FireIcon } from './Icons';
 import Link from 'next/link';
 import { initPostHog, track } from '@/lib/posthog';
 
@@ -291,7 +292,7 @@ export default function Game() {
               aria-label={`${stats.currentStreak} day streak. View stats.`}
               title="View stats"
             >
-              <span>&#128293;</span>
+              <FireIcon size={16} />
               <span className="font-mono font-semibold text-xs">{stats.currentStreak}</span>
             </button>
           )}
